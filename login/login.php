@@ -105,10 +105,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 </head>
 
 <body>
-    <!-- <div id="login-button">
+    <div id="login-button">
         <img src="https://dqcgrsy5v35b9.cloudfront.net/cruiseplanner/assets/img/icons/login-w-icon.png">
         </img>
-    </div> -->
+    </div>
     <div id="container">
         <h1>Log In</h1>
         <span class="close-btn">

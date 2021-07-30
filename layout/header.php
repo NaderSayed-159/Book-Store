@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,14 +25,14 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-dark bg-gradient">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="#home">
-                        <img src="images/sup_logo.PNG" alt="" width="70" height="50">
+                        <img src="<?php echo images('logo.png');?>" alt="" width="70" height="50">
                     </a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon text-danger"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-warning">
                             <li class="nav-item ">
-                                <a class="nav-link active text-warning fw-bold" aria-current="page" href="index.php">Home</a>
+                                <a class="nav-link active text-warning fw-bold" aria-current="page" href="<?php project('index.php');?>">Home</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-warning fw-bold" href="#">Soon!</a>
@@ -42,7 +43,7 @@
                             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                             <button class="btn btn-danger" type="submit">Search</button>
                         </form>
-                        <a href="logout.php" class="btn btn-danger" type="submit">Log Out</a>
+                        <a href="<?php echo login('logout.php')?>" class="btn btn-danger" type="submit">Log Out</a>
                     </div>
                 </div>
             </nav>

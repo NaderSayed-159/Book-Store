@@ -1,8 +1,9 @@
 <?php
 ob_start();
 
-require '../../dbConnection.php';
-require 'headadmin.php';
+require "../../helpers/paths.php";
+require '../../helpers/dbConnection.php' ;
+require '../../layout/navAdmin.php' ;
 require '../../checklogin/checkLoginadmin.php';
 
 
@@ -90,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($op) {
             $_SESSION['message'] = "Data Updated";
-            header("Location: index.php");
+            header("Location: ". users('index.php'));
         } else {
             $errorMessages['sqlOperation'] = "Error in Your Sql Try Again";
         }
@@ -131,7 +132,7 @@ $op2 =  mysqli_query($con, $sqlTypes);
     <title>Update data</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../../css/edit.css">
+    <link rel="stylesheet" href="<?php echo css('edit.css')?>">
 </head>
 
 <body>
@@ -151,12 +152,7 @@ $op2 =  mysqli_query($con, $sqlTypes);
                     <label for="floatingInput">E-mail</label>
                 </div>
             </div>
-            <!-- <div class="col-sm-12 m-3 ">
-                <div class=" form-floating">
-                    <input type="password" disabled class="form-control" id="floatingInput" placeholder="Password" name="password" value="<?php echo $data['password']; ?>">
-                    <label for="floatingInput">Password</label>
-                </div>
-            </div> -->
+
             <div class="d-flex align-items-center justify-content-around">
                 <div class="col-lg-3 mt-3 mb-3 ">
                     <div class=" form-floating">

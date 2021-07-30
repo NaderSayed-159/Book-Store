@@ -1,9 +1,12 @@
 <?php
 ob_start();
 
-require '../../dbConnection.php';
-require "./headadmin.php";
+
+require "../../helpers/paths.php";
+require '../../helpers/dbConnection.php' ;
+require '../../layout/navAdmin.php' ;
 require '../../checklogin/checkLoginadmin.php';
+
 
 $sqlTypes = "select * from usersTypes";
 $op2 =  mysqli_query($con, $sqlTypes);
@@ -92,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($op) {
             $_SESSION['message'] = "User Added";
-            header("Location: index.php");
+            header("Location: ".users('index.php'));
         } else {
             $errorMessages['sqlOperation'] = "Error in Your Sql Try Again";
         }
@@ -124,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adding Data to database</title>
-    <link rel="stylesheet" href="../../css/create.css">
+    <link rel="stylesheet" href="<?php echo css('create.css')?>">
 
 
 </head>

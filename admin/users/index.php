@@ -1,8 +1,8 @@
 <?php
-header_remove();
-ob_start();
-require '../../dbConnection.php';
-require "headadmin.php";
+
+require "../../helpers/paths.php";
+require '../../helpers/dbConnection.php' ;
+require '../../layout/navAdmin.php' ;
 require '../../checklogin/checkLoginadmin.php';
 
 
@@ -20,7 +20,7 @@ $op = mysqli_query($con, $sql);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Users Display</title>
-    <link rel="stylesheet" href="../../css/display.css">
+    <link rel="stylesheet" href="<?php echo css('display.css')?>">
     <style>
         .head {
             margin-top: 20px;

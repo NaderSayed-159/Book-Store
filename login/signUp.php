@@ -1,6 +1,8 @@
 <?php
 
-require 'dbConnection.php';
+require '../helpers/dbConnection.php';
+require '../helpers/paths.php';
+
 
 $sqlTypes = "select * from usersTypes where id >1";
 $op2 =  mysqli_query($con, $sqlTypes);
@@ -92,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($op) {
             $_SESSION['message'] = "User Added";
-            header("Location: login.php");
+            header("Location: ".login('login.css'));
         } else {
             $errorMessages['sqlOperation'] = "Try Again";
         }
@@ -130,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="css/signup.css">
+    <link rel="stylesheet" href="<?php css('signup.css')?>">
     <style>
 
     </style>
@@ -176,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
     </div>
 
-    <script src="js/login.js"></script>
+    <script src="<?php js('login.js')?>"></script>
 </body>
 
 </html>

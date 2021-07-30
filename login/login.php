@@ -1,6 +1,7 @@
 <?php
 
-require "dbConnection.php";
+require "../helpers/dbConnection.php";
+require '../helpers/paths.php';
 
 
 function CleanInputs($input)
@@ -62,10 +63,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
             if ($data['user_type'] == 1) {
                 $_SESSION['data'] = $data;
-                header("Location: ./admin/users/index.php");
+                header("Location: ".users('index.php'));
             } else {
-                $_SESSION['data'] = $data;
-                header("Location: index.php");
+                $_SESSION['users'] = $data;
+                header("Location: ". project('index.php'));
             }
         } else {
 
@@ -99,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="<?php echo css("login.css")?>">
 
 
 </head>
@@ -125,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     </div>
 
-    <script src="js/login.js"></script>
+    <script src="<?php echo  js("login.js")?>"></script>
 </body>
 
 </html>

@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+// require "http://". $_SERVER['SERVER_NAME']. "/g2p/helpers/paths.php";
+
+
+
 $server = 'localhost';
 $dbName = 'g2p22';
 $dbUser = 'root';

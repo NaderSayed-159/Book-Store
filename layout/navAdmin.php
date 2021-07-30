@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,7 +29,7 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-dark bg-gradient ">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="#home">
-                        <img src="images/sup_logo.PNG" alt="" width="70" height="50">
+                        <img src="<?php echo images('logo.png');?>" alt="" width="70" height="50">
                     </a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon text-danger"></span>
                     </button>
@@ -37,8 +38,8 @@
                             <li class="nav-item dropdown ">
                                 <a class="nav-link dropdown-toggle text-warning fw-bold" href="#" id="navbarDropdown" data-bs-toggle="dropdown">Users</a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="./index.php">Show Users </a></li>
-                                    <li><a class="dropdown-item" href="./create.php">Appand New</a></li>
+                                    <li><a class="dropdown-item" href="<?php echo users('index.php') ?>">Show Users </a></li>
+                                    <li><a class="dropdown-item" href="<?php echo users('create.php') ?>">Appand New</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
@@ -46,7 +47,7 @@
                                     Resources
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="../resources/books/index.php">Books </a></li>
+                                    <li><a class="dropdown-item" href="<?php echo resources('books/index.php') ?>">Books </a></li>
                                     <li><a class="dropdown-item" href="#">News</a></li>
                                     <li><a class="dropdown-item" href="#">Posts</a></li>
                                     <li>
@@ -57,10 +58,10 @@
                                             <li><a class="dropdown-item " href="#">Question Replays</a></li>
                                         </ul>
                                     </li>
-                                    <li><a class="dropdown-item" href="../resources/events/index.php">Events</a>
+                                    <li><a class="dropdown-item" href="<?php resources('events/index.php') ?>">Events</a>
                                         <ul class="list-unstyled ps-3">
-                                            <li><a class="dropdown-item " href="../resources/eventsCheck/index.php">Events Check</a></li>
-                                            <li><a class="dropdown-item " href="../resources/eventsReservations/index.php">Events Reservations</a></li>
+                                            <li><a class="dropdown-item " href="<?php echo resources('eventsCheck/index.php') ?>">Events Check</a></li>
+                                            <li><a class="dropdown-item " href="<?php echo resources('eventsReservations/index.php') ?>">Events Reservations</a></li>
                                         </ul>
                                     </li>
                             </li>
@@ -69,12 +70,11 @@
                         </li>
 
                         </ul>
-                        <form class="d-flex">
+                        <form class="d-flex ">
                             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-danger" type="submit">Search</button>
-                            <a href="../../logout.php" class="btn btn-danger" type="submit">Log Out</a>
-
+                            <button class="btn btn-danger text-white" type="submit">Search</button>
                         </form>
+                        <a href="<?php echo login('logout.php')?>" class="btn btn-danger text-white" type="submit">Log Out</a>
                     </div>
                 </div>
             </nav>

@@ -1,6 +1,7 @@
 <?php
 
-require '../../dbConnection.php';
+require "../../helpers/paths.php";
+require '../../helpers/dbConnection.php' ;
 require '../../checklogin/checkLoginadmin.php';
 
 
@@ -30,4 +31,4 @@ if (filter_var($id, FILTER_VALIDATE_INT)) {
 
 $_SESSION['message'] = $message;
 
-header("Location: index.php");
+header("Location: ". users('index.php'));

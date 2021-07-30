@@ -3,6 +3,8 @@ function project($dis){
     return "http://" . $_SERVER['SERVER_NAME'] . "/g2p/" . $dis;
 }
 
+
+
 function users($dis){
     return "http://" . $_SERVER['SERVER_NAME'] . "/g2p/admin/users/" . $dis;
 }
@@ -13,7 +15,7 @@ function resources($dis){
 }
 
 function login($dis){
-    return "http://" . $_SERVER['SERVER_NAME'] . "/g2p/login/" . $dis;
+    return $txt = "http://" . $_SERVER['SERVER_NAME'] . "/g2p/login/" . $dis;
 }
 
 
@@ -24,12 +26,12 @@ function layouts($dis){
 
 function css($dis){
 
-    return "http://" . $_SERVER['SERVER_NAME'] . "/g2p/assests/css/" . $dis;
+    return   "http://" . $_SERVER['SERVER_NAME'] . "/g2p/assests/css/" . $dis;
 }
 
 function js($dis){
 
-    return "http://" . $_SERVER['SERVER_NAME'] . "/g2p/assests/js/" . $dis;
+    echo "http://" . $_SERVER['SERVER_NAME'] . "/g2p/assests/js/" . $dis;
 }
 
 function images($dis){

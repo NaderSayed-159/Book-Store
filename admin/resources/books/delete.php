@@ -19,10 +19,8 @@ if (!Validator($id, 3)) {
     $dataimg = mysqli_fetch_assoc($opimg);
 
 
-    if (file_exists('../../../assests/images/booksCovers/' . trim($dataimg['coverPic']))) {
+    if (!Validator('../../../assests/images/booksCovers/' . trim($dataimg['coverPic']), 7)) {
 
-        unlink('../../../assests/images/booksCovers/' . trim($dataimg['coverPic']));
-    } else {
         $message = "image is not deleted";
     }
 
@@ -43,4 +41,4 @@ if (!Validator($id, 3)) {
 
 $_SESSION['message'] = $message;
 
-header("Location: index.php");
+header("Location: " . resources('books/index.php'));

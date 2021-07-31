@@ -91,10 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 
-
-
-
-
     if (count($errorMessages) > 0) {
         $_SESSION['errmessages'] = $errorMessages;
     } else {

@@ -5,7 +5,7 @@ require '../../../layout/navAdmin.php';
 require '../../../checklogin/checkLoginadmin.php';
 
 
-$sql = "select events.* , users.id as userID , users.name as submiter from events join users on events.event_submiter = users.id order by events.id asc";
+$sql = "select events.* , users.id as userID , users.name as submiter from events join users on events.event_submiter = users.id order by events.id desc";
 $op = mysqli_query($con, $sql);
 
 

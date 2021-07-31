@@ -1,26 +1,26 @@
 <?php
 
 require "../../../helpers/paths.php";
+require "../../../helpers/functions.php";
 require '../../../helpers/dbConnection.php';
 require '../../../checklogin/checkLoginadmin.php';
 
 $id = $_GET['id'];
 
-$id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+$id = Sanitize($id, 1);
 
 $message = '';
 
-if (filter_var($id, FILTER_VALIDATE_INT)) {
+if (!Validator($id, 3)) {
 
+    $message = "Invalid id";
+} else {
 
     $sqlLogo = "select event_logo from events where id = " . $id;
     $opLogo  = mysqli_query($con, $sqlLogo);
     $dataLogo = mysqli_fetch_assoc($opLogo);
 
-    if (file_exists('../../../assests/images/eventsLogos/' . $dataLogo['event_logo'])) {
-
-        unlink('../../../assests/images/eventsLogos/' . $dataLogo['event_logo']);
-    } else {
+    if (!Validator('../../../assests/images/eventsLogos/' . trim($dataLogo['event_logo']), 7)) {
         $message = "image is not deleted";
     }
     $sql = "delete from events where id =" . $id;
@@ -34,8 +34,6 @@ if (filter_var($id, FILTER_VALIDATE_INT)) {
 
         $message = "Error Try Again !!!";
     }
-} else {
-    $message = "Invalid id";
 }
 
 

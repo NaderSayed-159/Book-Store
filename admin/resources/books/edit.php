@@ -74,18 +74,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
 
+    // cover Validation 
+
     $sqlimg = "select coverPic from books where id = " . $id;
     $opimg  = mysqli_query($con, $sqlimg);
     $dataimg = mysqli_fetch_assoc($opimg);
 
-    // cover Validation 
 
-    $covername = $_FILES['cover']['name'];
+
+    $covername  = $_FILES['cover']['name'];
 
     if (!Validator($covername, 1)) {
         $CoverName = $dataimg['coverPic'];
     } else {
-
         $nameArray = explode('.', $covername);
         $fileExtension = strtolower($nameArray[1]);
         if (!Validator($fileExtension, 5)) {
@@ -107,18 +108,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $tmp_path = $_FILES['cover']['tmp_name'];
             $CoverName = rand() . time() . '.' . $fileExtension;
 
-
-
-
             $disFolder =  '../../../assests/images/booksCovers/';
-
             $disPath  = $disFolder . $CoverName;
 
             if (move_uploaded_file($tmp_path, $disPath)) {
 
-                if (file_exists('../../../assests/images/booksCovers/' . trim($dataimg['coverPic']))) {
+                if (!Validator('../../../assests/images/booksCovers/' . trim($dataimg['coverPic']), 7)) {
 
-                    unlink('../../../assests/images/booksCovers/' . trim($dataimg['coverPic']));
+                    $errorMessages['imageChange'] = "image is not deleted";
                 }
             }
         }
@@ -181,7 +178,7 @@ $databook = mysqli_fetch_assoc($opbooks);
         <small>Update Book by Admin! </small>
     </h1>
     <ol class="breadcrumb bg-gradient bg-dark p-2 mx-auto mt-5 w-50 ">
-        <li class="breadcrumb-item"><a class="text-decoration-none text-danger" href="<?php echo users('index.php') ?>">Books</a></li>
+        <li class="breadcrumb-item"><a class="text-decoration-none text-danger" href="<?php echo resources('books/index.php') ?>">Books</a></li>
         <li class="breadcrumb-item active ">Edit Book Data</li>
     </ol>
 

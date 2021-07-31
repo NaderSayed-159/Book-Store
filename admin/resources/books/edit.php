@@ -1,8 +1,9 @@
 <?php
 ob_start();
-require '../../../dbConnection.php';
-require "../headeradmin.php";
-require '../../../checklogin/checkLogin.php';
+require "../../../helpers/paths.php";
+require '../../../helpers/dbConnection.php';
+require '../../../checklogin/checkLoginadmin.php';
+require '../../../layout/navAdmin.php';
 
 
 
@@ -18,11 +19,6 @@ if (!filter_var($id, FILTER_VALIDATE_INT)) {
 
     header("Locattion: index.php");
 }
-
-//users
-$sqlbook = "select * from books where id =$id";
-$opbooks =  mysqli_query($con, $sqlbook);
-$databook = mysqli_fetch_assoc($opbooks);
 
 
 function cleanInputs($input)
@@ -85,10 +81,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
 
-
+    $sqlimg = "select coverPic from books where id = " . $id;
+    $opimg  = mysqli_query($con, $sqlimg);
+    $dataimg = mysqli_fetch_assoc($opimg);
 
     // cover Validation 
     if (!empty($_FILES['cover']['name']) && isset($_FILES['cover']['name'])) {
+
 
         $tmp_path = $_FILES['cover']['tmp_name'];
         $covername = $_FILES['cover']['name'];
@@ -103,15 +102,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if (in_array($fileExtension, $allowedExtensions)) {
 
-            $disFolder = './images/covers/';
+
+
+            $disFolder =  '../../../assests/images/booksCovers/';
 
             $disPath  = $disFolder . $CoverName;
-            move_uploaded_file($tmp_path, $disPath);
+
+            if (move_uploaded_file($tmp_path, $disPath)) {
+
+                if (file_exists('../../../assests/images/booksCovers/' . trim($dataimg['coverPic']))) {
+
+                    unlink('../../../assests/images/booksCovers/' . trim($dataimg['coverPic']));
+                }
+            }
         } else {
             $errorMessages['Cover'] = '* extension not allowed';
         }
     } else {
-        $CoverName = $databook['coverPic'];
+
+        $CoverName = $dataimg['coverPic'];
     }
 
 
@@ -170,6 +179,8 @@ $databook = mysqli_fetch_assoc($opbooks);
 
 
 
+
+
 ?>
 
 
@@ -181,7 +192,7 @@ $databook = mysqli_fetch_assoc($opbooks);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Book data</title>
-    <link rel="stylesheet" href="../../../css/edit.css">
+    <link rel="stylesheet" href="<?php echo css('edit.css') ?>">
 
 </head>
 
@@ -264,7 +275,7 @@ $databook = mysqli_fetch_assoc($opbooks);
             <div class="card-body bg-warning">
                 <p class="card-text text-danger text-center fw-bold fs-4">Cover</p>
             </div>
-            <img src="<?php echo "./images/covers/" . trim($databook['coverPic']) ?>" class="card-img-top" alt="cover">
+            <img src="<?php echo images('booksCovers/') . trim($databook['coverPic']) ?>" class="card-img-top" alt="cover">
         </div>
     </div>
 </body>

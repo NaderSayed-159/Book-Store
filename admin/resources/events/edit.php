@@ -16,7 +16,7 @@ if (!filter_var($id, FILTER_VALIDATE_INT)) {
 
     $_SESSION['message'] = "Invalid Id";
 
-    header("Locattion: index.php");
+    header("Locattion: " . resources('events/index.php'));
 }
 
 // events
@@ -68,12 +68,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errorMessages['event describtion'] = "Required";
     }
 
+    // logo Validation 
 
     $sqllogo = "select event_logo from events where id = " . $id;
     $oplogo  = mysqli_query($con, $sqllogo);
     $dataLogo = mysqli_fetch_assoc($oplogo);
 
-    // logo Validation 
+
     if (!empty($_FILES['logo']['name']) && isset($_FILES['logo']['name'])) {
 
 

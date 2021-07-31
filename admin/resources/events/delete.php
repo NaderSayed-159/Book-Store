@@ -41,4 +41,4 @@ if (filter_var($id, FILTER_VALIDATE_INT)) {
 
 $_SESSION['message'] = $message;
 
-header("Location: index.php");
+header("Location: " . resources('events/index.php'));

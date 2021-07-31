@@ -34,15 +34,6 @@ $op = mysqli_query($con, $sql);
             left: 15%;
             transform: translateX(-50%) translateY(-125%);
         }
-
-        table {
-            width: 100% !important;
-        }
-
-
-        th h1 {
-            text-align: center !important;
-        }
     </style>
 </head>
 

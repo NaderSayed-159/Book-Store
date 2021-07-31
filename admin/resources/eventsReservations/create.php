@@ -1,8 +1,9 @@
 <?php
 ob_start();
-require '../../../dbConnection.php';
-require "../headeradmin.php";
-require '../../../checklogin/checkLogin.php';
+require "../../../helpers/paths.php";
+require '../../../helpers/dbConnection.php';
+require '../../../checklogin/checkLoginadmin.php';
+require '../../../layout/navAdmin.php';
 
 
 
@@ -73,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($ops) {
             echo 'data inserted';
             $_SESSION['message'] = "Reservation Done";
-            header("Location: ./index.php");
+            header("Location: " . resources('eventsReservations/index.php'));
         } else {
             echo "Error in Your Sql Try Again";
         }
@@ -89,7 +90,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 
-
+$sqllogo =  'select event_logo from events';
+$oplogo = mysqli_query($con, $sqllogo);
+$dataevent = mysqli_fetch_assoc($oplogo);
 
 
 
@@ -107,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adding Data to database</title>
 
-    <link rel="stylesheet" href="../../../css/create.css">
+    <link rel="stylesheet" href="<?php echo css('create.css') ?>">
 </head>
 
 <body class="col-12">
@@ -115,42 +118,65 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <h1 class="text-danger">Add a new Event to Database
         <small>Create a new Event </small>
     </h1>
+    <div class=" mx-5 d-flex flex-column flex-lg-row col-lg-8 col-12 justify-content-between align-items-center">
 
-    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" class="container  col-8 mx-auto mt-5 d-flex align-items-center flex-column  p-4 ps-0 " enctype="multipart/form-data">
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" class="  col-8 mx-auto mt-5 d-flex align-items-center flex-column  p-4 ps-0 " enctype="multipart/form-data">
 
 
-        <div class="col-12 col-lg-7 m-3 mx-auto">
-            <div class=" form-control p-2  ">
-                <label for="adder" class="p-2">Event name </label>
-                <select id="adder" class="form-select" name="event">
-                    <?php while ($dataevent = mysqli_fetch_assoc($opevents)) {
-                    ?>
-                        <option value="<?php echo $dataevent['id']; ?>"><?php echo $dataevent['event_name']; ?></option>
-                    <?php } ?>
-                </select>
+            <div class="col-12 col-lg-7 m-3 mx-auto">
+                <div class=" form-control p-2  ">
+                    <label for="event" class="p-2">Event name </label>
+                    <select id="event" class="form-select" name="event">
+                        <option value=""></option>
+                        <?php while ($dataevent = mysqli_fetch_assoc($opevents)) {
+                        ?>
+                            <option <?php echo "data-logo='" . $dataevent['event_logo'] . "'"; ?> value="<?php echo $dataevent['id']; ?>"><?php echo $dataevent['event_name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
             </div>
+
+            <div class="col-12 col-lg-7 m-3 mx-auto">
+                <div class=" form-control p-2  ">
+                    <label for="adder" class="p-2">Event Submiter </label>
+                    <select id="adder" class="form-select" name="enroller">
+                        <?php while ($datauser = mysqli_fetch_assoc($opusers)) {
+                        ?>
+                            <option value="<?php echo $datauser['id']; ?>"><?php echo $datauser['name']; ?> </option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+
+            <input type="submit" class="btn btn-warning col-5 m-3 " value="Reseve">
+
+        </form>
+        <div class="col-lg-3 align-self-center col-6">
+            <div class="card-body bg-warning">
+                <p class="card-text text-danger text-center fw-bold fs-4">Logo</p>
+            </div>
+            <img id="logoViewer" src="<?php echo images('eventsLogos/template.png') ?>" class="card-img-top" alt="logo">
         </div>
 
-        <div class="col-12 col-lg-7 m-3 mx-auto">
-            <div class=" form-control p-2  ">
-                <label for="adder" class="p-2">Event Submiter </label>
-                <select id="adder" class="form-select" name="enroller">
-                    <?php while ($datauser = mysqli_fetch_assoc($opusers)) {
-                    ?>
-                        <option value="<?php echo $datauser['id']; ?>"><?php echo $datauser['name']; ?></option>
-                    <?php } ?>
-                </select>
-            </div>
-        </div>
+    </div>
 
+    <script>
+        let eventLogo = document.getElementById('event'),
+            logoViewer = document.getElementById('logoViewer');
+        eventLogo.addEventListener('change', () => {
+            var option = eventLogo.options[eventLogo.selectedIndex];
+            var logoName = option.getAttribute('data-logo');
 
+            if (!option.value == '') {
+                logoViewer.src = "<?php echo images('eventsLogos/') ?>" + logoName;
 
+            } else {
 
-        <input type="submit" class="btn btn-warning col-5 m-3 " value="Reseve">
+                logoViewer.src = "<?php echo images('eventsLogos/') ?>" + "template.png";
 
-    </form>
-
-
+            }
+        });
+    </script>
 </body>
 
 </html>

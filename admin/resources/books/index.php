@@ -1,7 +1,7 @@
 <?php
 require "../../../helpers/paths.php";
-require '../../../helpers/dbConnection.php' ;
-require '../../../layout/navAdmin.php' ;
+require '../../../helpers/dbConnection.php';
+require '../../../layout/navAdmin.php';
 require '../../../checklogin/checkLoginadmin.php';
 
 
@@ -23,7 +23,7 @@ $op = mysqli_query($con, $sql);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Books Data</title>
-    <link rel="stylesheet" href="<?php echo css('display.css')?>">
+    <link rel="stylesheet" href="<?php echo css('display.css') ?>">
     <style>
         .head {
             margin-top: 20px;
@@ -34,15 +34,6 @@ $op = mysqli_query($con, $sql);
             position: absolute;
             left: 15%;
             transform: translateX(-50%) translateY(-125%);
-        }
-
-        table {
-            width: 100% !important;
-        }
-
-    
-        th h1 {
-            text-align: center !important;
         }
     </style>
 </head>
@@ -58,7 +49,7 @@ $op = mysqli_query($con, $sql);
         ?>
 
     </h2>
-    <a href="<?php echo resources('books/create.php')?>" class="btn btn-danger add" style="    color: #fff ;
+    <a href="<?php echo resources('books/create.php') ?>" class="btn btn-danger add" style="    color: #fff ;
     background-color: #dc3545;
     border-color: #dc3545;">Add New +</a>
 
@@ -100,7 +91,7 @@ $op = mysqli_query($con, $sql);
                     <td><?php echo $data['book_name']; ?></td>
                     <td><?php echo $data['category']; ?></td>
                     <td style=" text-align: center; "><?php echo $data['describtion']; ?></td>
-                    <td style="overflow: hidden;text-overflow: ellipsis;"  ><?php echo $data['Download']; ?></td>
+                    <td style="overflow: hidden;text-overflow: ellipsis;"><?php echo $data['Download']; ?></td>
                     <td style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"><?php echo $data['coverPic']; ?></td>
                     <td><?php echo $data['adder']; ?></td>
                     <td>

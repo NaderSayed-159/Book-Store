@@ -1,7 +1,8 @@
 <?php
 
-require '../../../dbConnection.php';
-require '../../../checklogin/checkLogin.php';
+require "../../../helpers/paths.php";
+require '../../../helpers/dbConnection.php';
+require '../../../checklogin/checkLoginadmin.php';
 
 
 $id = $_GET['id'];
@@ -25,16 +26,16 @@ if (filter_var($id, FILTER_VALIDATE_INT)) {
     $eventadder = $dataCheck['event_submiter'];
 
 
-    //     echo $eventName;
-    //     echo $eventdesc;
-    //     echo $eventdate;
-    //     echo $eventlogo;
-    //     echo $eventadder;
-    // }
+
     $sqlAddEvent = "insert into events (event_name,event_describtion,eventDate,event_logo,event_submiter) values ('$eventName','$eventdesc','$eventdate','$eventlogo',$eventadder)";
     $opAddEvent = mysqli_query($con, $sqlAddEvent);
 
     if ($opAddEvent) {
+
+        $disOld  = '../../../assests/images/eventsCheckLogos/' . trim($eventlogo);
+        $disFolder = '../../../assests/images/eventsLogos/' . trim($eventlogo);
+
+        rename($disOld, $disFolder);
 
         $message = "Event Added";
 
@@ -50,4 +51,4 @@ if (filter_var($id, FILTER_VALIDATE_INT)) {
 
 $_SESSION['message'] = $message;
 
-header("Location: ../events/index.php");
+header("Location: " . resources('events/index.php'));

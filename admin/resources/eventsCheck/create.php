@@ -1,8 +1,9 @@
 <?php
 ob_start();
-require '../../../dbConnection.php';
-require "../headeradmin.php";
-require '../../../checklogin/checkLogin.php';
+require "../../../helpers/paths.php";
+require '../../../helpers/dbConnection.php';
+require '../../../checklogin/checkLoginadmin.php';
+require '../../../layout/navAdmin.php';
 
 
 
@@ -60,10 +61,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
         $tmp_path = $_FILES['logo']['tmp_name'];
-        $covername = $_FILES['logo']['name'];
+        $logooldName = $_FILES['logo']['name'];
 
 
-        $nameArray = explode('.', $covername);
+        $nameArray = explode('.', $logooldName);
         $fileExtension = strtolower($nameArray[1]);
 
         $LogoName = rand() . time() . '.' . $fileExtension;
@@ -72,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if (in_array($fileExtension, $allowedExtensions)) {
 
-            $disFolder = './images/logos/';
+            $disFolder = '../../../assests/images/eventsCheckLogos/';
 
             $disPath  = $disFolder . $LogoName;
             move_uploaded_file($tmp_path, $disPath);
@@ -80,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errorMessages['logo'] = '* extension not allowed';
         }
     } else {
-        $errorMessages['logo'] = 'pls upload cover';
+        $errorMessages['logo'] = 'pls upload logo';
     }
 
 
@@ -113,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($ops) {
             echo 'data inserted';
             $_SESSION['message'] = "Data Inserted";
-            header("Location: ./index.php");
+            header("Location: " . resources('eventsCheck/index.php'));
         } else {
             echo "Error in Your Sql Try Again";
         }
@@ -147,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adding Data to database</title>
 
-    <link rel="stylesheet" href="../../../css/create.css">
+    <link rel="stylesheet" href="<?php echo css('create.css') ?>">
 </head>
 
 <body class="col-12">

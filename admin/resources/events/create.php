@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errorMessages['logo'] = '* extension not allowed';
         }
     } else {
-        $errorMessages['logo'] = 'pls upload cover';
+        $errorMessages['logo'] = 'pls upload logo';
     }
 
 
@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($ops) {
             echo 'Data inserted';
             $_SESSION['message'] = "Data Inserted";
-            header("Location: index.php");
+            header("Location: " . resources('events/index.php'));
         } else {
             echo "Error in Your Sql Try Again";
         }

@@ -22,14 +22,6 @@ $op = mysqli_query($con, $sql);
     <title>Users Display</title>
     <link rel="stylesheet" href="<?php echo css('display.css') ?>">
     <style>
-        .head {
-            margin-top: 20px;
-        }
-
-        th h1 {
-            text-align: center !important;
-        }
-
         .container th,
         .container td {
             padding: 15px 10px !important;
@@ -40,7 +32,7 @@ $op = mysqli_query($con, $sql);
 
 <body>
 
-    <h1 class="head"><span class="blue">&lt;</span>Users<span class="blue">&gt;</span> <span class="yellow">Data</pan>
+    <h1 class="m-5"><span class="blue">&lt;</span>Users<span class="blue">&gt;</span> <span class="yellow">Data</pan>
     </h1>
     <h2>Admin Premission Only! <br><br>
         <?php if (isset($_SESSION['message'])) {

@@ -1,9 +1,8 @@
 <?php
 
-require '../../../dbConnection.php';
-require '../../../checkLogin.php';
-require '../../../checklogin/checkLogin.php';
-
+require "../../../helpers/paths.php";
+require '../../../helpers/dbConnection.php';
+require '../../../checklogin/checkLoginadmin.php';
 
 $id = $_GET['id'];
 
@@ -31,4 +30,4 @@ if (filter_var($id, FILTER_VALIDATE_INT)) {
 
 $_SESSION['message'] = $message;
 
-header("Location: index.php");
+header("Location: " . resources('eventsCheck/index.php'));

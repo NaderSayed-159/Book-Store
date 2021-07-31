@@ -1,8 +1,8 @@
 <?php
-require '../../../dbConnection.php';
-require "../headeradmin.php";
-require '../../../checklogin/checkLogin.php';
-
+require "../../../helpers/paths.php";
+require '../../../helpers/dbConnection.php';
+require '../../../checklogin/checkLoginadmin.php';
+require '../../../layout/navAdmin.php';
 
 
 
@@ -41,7 +41,7 @@ if (filter_var($id, FILTER_VALIDATE_INT)) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Events details</title>
-    <link rel="stylesheet" href="../../../css/display.css">
+    <link rel="stylesheet" href="<?php echo css('display.css') ?>">
     <style>
         .head {
             margin-top: 20px;
@@ -132,7 +132,7 @@ if (filter_var($id, FILTER_VALIDATE_INT)) {
                 <p class="card-text text-success text-center fw-bold fs-4">Logo</p>
             </div>
 
-            <img id="eventLogo" src=" <?php echo "../events/images/logos/" . $data['event_logo'] ?>" class="card-img-top" alt="logo">
+            <img id="eventLogo" src=" <?php echo images('eventsLogos/') . $data['event_logo'] ?>" class="card-img-top" alt="logo">
 
         </div>
 

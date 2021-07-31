@@ -3,8 +3,9 @@ ob_start();
 
 
 require "../../helpers/paths.php";
-require '../../helpers/dbConnection.php' ;
-require '../../layout/navAdmin.php' ;
+require "../../helpers/functions.php";
+require '../../helpers/dbConnection.php';
+require '../../layout/navAdmin.php';
 require '../../checklogin/checkLoginadmin.php';
 
 
@@ -12,16 +13,6 @@ $sqlTypes = "select * from usersTypes";
 $op2 =  mysqli_query($con, $sqlTypes);
 
 
-
-function cleanInputs($input)
-{
-
-    $input = trim($input);
-    $input = stripcslashes($input);
-    $input = htmlspecialchars($input);
-
-    return $input;
-}
 $errorMessages = [];
 
 
@@ -29,63 +20,70 @@ $errorMessages = [];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $name  = cleanInputs($_POST['name']);
+    $name  = cleanInputs(Sanitize($_POST['name'], 2));
     $email = cleanInputs($_POST['email']);
     $password = cleanInputs($_POST['password']);
     $phone = cleanInputs($_POST['phone']);
-    $gender = $_POST['gender'];
-    $usertype = $_POST['usertype'];
+    $gender = Sanitize($_POST['gender'], 1);
+    $usertype = Sanitize($_POST['usertype'], 2);
 
 
 
     //Name Validation
-    if (!empty($name)) {
-
-        if (strlen($name) < 3) {
-            $errorMessages['name'] = "Name Length must be > 2 ";
-        }
-    } else {
+    if (!Validator($name, 1)) {
         $errorMessages['name'] = "Required";
+    }
+
+    if (!Validator($name, 2)) {
+
+        $errorMessages['name'] = "Name Length must be more than 3 ";
     }
 
 
     //Email Validation
-    if (!empty($email)) {
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errorMessages['email'] = "Invalid Email";
-        }
-    } else {
+    if (!Validator($email, 1)) {
         $errorMessages['email'] = "Required";
     }
 
+    if (!Validator($email, 4)) {
+        $errorMessages['email'] = "Invalid Email";
+    }
 
 
     // Password Validation ... 
-    if (!empty($password)) {
-        // code ...   
-        if (strlen($password) < 6) {
-
-            $errorMessages['Password'] = "Password Length must be > 5 ";
-        }
-    } else {
+    if (!Validator($password, 2, 6)) {
 
         $errorMessages['Password'] = "Required";
     }
+
+
+    if (!Validator($password, 2, 6)) {
+
+        $errorMessages['Password'] = "Password Length must be more than 6 ";
+    }
+
+
+
+
     // phone Validation ... 
-    if (!empty($phone)) {
-        // code ...   
-        if (strlen($phone) < 11) {
-
-            $errorMessages['phone'] = "Phone should be 11 numbers";
-        }
-    } else {
-
+    if (!Validator($phone, 1)) {
         $errorMessages['phone'] = "Required";
     }
 
 
-    if (count($errorMessages) == 0) {
+    if (!Validator($phone, 2, 11)) {
 
+        $errorMessages['phone'] = "Phone should be 11 numbers";
+    }
+
+
+
+    if (count($errorMessages) > 0) {
+
+        $_SESSION['errmessages'] = $errorMessages;
+    } else {
+
+        // operations
         $password = sha1($password);
 
         $sql = "insert into users (name,email,password,phone,gender,user_type) values ('$name','$email','$password','$phone','$gender',$usertype)";
@@ -95,16 +93,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($op) {
             $_SESSION['message'] = "User Added";
-            header("Location: ".users('index.php'));
+            header("Location: " . users('index.php'));
         } else {
             $errorMessages['sqlOperation'] = "Error in Your Sql Try Again";
         }
-    } else {
 
-        foreach ($errorMessages as $key => $value) {
-
-            echo '* ' . $key . ' : ' . $value . '<br>';
-        }
+        $_SESSION['errmessages'] = $errorMessages;
     }
 }
 
@@ -127,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adding Data to database</title>
-    <link rel="stylesheet" href="<?php echo css('create.css')?>">
+    <link rel="stylesheet" href="<?php echo css('create.css') ?>">
 
 
 </head>
@@ -135,8 +129,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body class="col-12">
     <h1 class="text-danger">Add a new data to Database
         <small>Create a new user </small>
-    </h1>
 
+    </h1>
+    <ol class="breadcrumb bg-gradient bg-dark p-2 mx-auto mt-5 w-50">
+        <li class="breadcrumb-item"><a class="text-decoration-none text-danger" href="<?php echo users('index.php') ?>">Users</a></li>
+        <li class="breadcrumb-item active ">Add User</li>
+    </ol>
+    <h4 class="bg-gradient bg-dark p-2 mx-auto mt-5 w-50 text-danger">
+        <?php
+        if (isset($_SESSION['errmessages'])) {
+
+            foreach ($_SESSION['errmessages'] as $key =>  $data) {
+
+                echo '* ' . $key . ' : ' . $data . '<br>';
+            }
+
+            unset($_SESSION['errmessages']);
+        } else {
+            echo "Fill the inputs Please!";
+        }
+        ?>
+    </h4>
     <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" class="container mx-auto mt-5 d-flex flex-column  p-4 ps-0 ">
         <div class="col-sm-12 m-3 ">
             <div class=" form-floating">

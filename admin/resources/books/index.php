@@ -6,7 +6,7 @@ require '../../../checklogin/checkLoginadmin.php';
 
 
 
-$sql = "select books.* , bookscategory.id as bookId , bookscategory.book_category as category , users.id as userID ,users.name as adder from books join bookscategory on books.book_category = bookscategory.id join users on books.book_adder = users.id  order by books.id asc";
+$sql = "select books.* , bookscategory.id as bookId , bookscategory.book_category as category , users.id as userID ,users.name as adder from books join bookscategory on books.book_category = bookscategory.id join users on books.book_adder = users.id  order by books.id desc";
 $op = mysqli_query($con, $sql);
 
 
@@ -25,10 +25,6 @@ $op = mysqli_query($con, $sql);
     <title>Books Data</title>
     <link rel="stylesheet" href="<?php echo css('display.css') ?>">
     <style>
-        .head {
-            margin-top: 20px;
-        }
-
         .add {
             text-align: center;
             position: absolute;
@@ -39,7 +35,7 @@ $op = mysqli_query($con, $sql);
 </head>
 
 <body>
-    <h1 class="head"><span class="blue">&lt;</span>Books<span class="blue">&gt;</span> <span class="yellow">Data</pan>
+    <h1 class="m-2"><span class="blue">&lt;</span>Books<span class="blue">&gt;</span> <span class="yellow">Data</pan>
     </h1>
     <h2>Admin Premission Only! <br><br>
         <?php if (isset($_SESSION['message'])) {
@@ -49,9 +45,7 @@ $op = mysqli_query($con, $sql);
         ?>
 
     </h2>
-    <a href="<?php echo resources('books/create.php') ?>" class="btn btn-danger add" style="    color: #fff ;
-    background-color: #dc3545;
-    border-color: #dc3545;">Add New +</a>
+    <a href="<?php echo resources('books/create.php') ?>" class="btn btn-danger add">Add New +</a>
 
 
     <table class="container">

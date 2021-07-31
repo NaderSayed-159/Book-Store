@@ -2,8 +2,9 @@
 ob_start();
 
 require "../../helpers/paths.php";
-require '../../helpers/dbConnection.php' ;
-require '../../layout/navAdmin.php' ;
+require "../../helpers/functions.php";
+require '../../helpers/dbConnection.php';
+require '../../layout/navAdmin.php';
 require '../../checklogin/checkLoginadmin.php';
 
 
@@ -15,74 +16,67 @@ $message = "";
 if (!filter_var($id, FILTER_VALIDATE_INT)) {
     $_SESSION['message'] = "Invalid Id";
 
-    header("Location: index.php");
+    header("Location: " . users('index.php'));
 }
 
 
 
 
-
-function cleanInputs($input)
-{
-
-    $input = trim($input);
-    $input = stripcslashes($input);
-    $input = htmlspecialchars($input);
-
-    return $input;
-}
 
 
 $errorMessages = [];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-    $name  = cleanInputs($_POST['name']);
+    $name  = cleanInputs(Sanitize($_POST['name'], 2));
     $email = cleanInputs($_POST['email']);
-    // $password = $_POST['password'];
     $phone = cleanInputs($_POST['phone']);
-    $gender = cleanInputs($_POST['gender']);
-    $usertype = $_POST['usertype'];
+    $gender = Sanitize($_POST['gender'], 2);
+    $usertype = Sanitize($_POST['usertype'], 1);
+
 
 
 
     //Name Validation
-    if (!empty($name)) {
-
-        if (strlen($name) < 3) {
-            $errorMessages['name'] = "Name Length must be > 2 ";
-        }
-    } else {
+    if (!Validator($name, 1)) {
         $errorMessages['name'] = "Required";
+    }
+
+    if (!Validator($name, 2)) {
+
+        $errorMessages['name'] = "Name Length must be more than 3 ";
     }
 
 
     //Email Validation
-    if (!empty($email)) {
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errorMessages['email'] = "Invalid Email";
-        }
-    } else {
+    if (!Validator($email, 1)) {
         $errorMessages['email'] = "Required";
     }
+
+    if (!Validator($email, 4)) {
+        $errorMessages['email'] = "Invalid Email";
+    }
+
+
+
 
 
 
     // phone Validation ... 
-    if (!empty($phone)) {
-        // code ...   
-        if (strlen($phone) < 11) {
-
-            $errorMessages['phone'] = "Phone should be 11 numbers";
-        }
-    } else {
-
+    if (!Validator($phone, 1)) {
         $errorMessages['phone'] = "Required";
     }
 
 
-    if (count($errorMessages) == 0) {
+    if (!Validator($phone, 2, 11)) {
 
+        $errorMessages['phone'] = "Phone should be 11 numbers";
+    }
+
+
+    if (count($errorMessages) > 0) {
+
+        $_SESSION['errmessages'] = $errorMessages;
+    } else {
 
         $sql22  = "update users set name = '$name' , email = '$email' , phone='$phone' , gender = '$gender' , user_type = '$usertype'  where id =$id ";
 
@@ -91,15 +85,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($op) {
             $_SESSION['message'] = "Data Updated";
-            header("Location: ". users('index.php'));
+            header("Location: " . users('index.php'));
         } else {
             $errorMessages['sqlOperation'] = "Error in Your Sql Try Again";
-        }
-    } else {
-
-        foreach ($errorMessages as $key => $value) {
-
-            echo '* ' . $key . ' : ' . $value . '<br>';
         }
     }
 }
@@ -132,13 +120,33 @@ $op2 =  mysqli_query($con, $sqlTypes);
     <title>Update data</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="<?php echo css('edit.css')?>">
+    <link rel="stylesheet" href="<?php echo css('edit.css') ?>">
 </head>
 
 <body>
 
     <div class="container">
         <h2 class="text-center h1 text-danger m-5">Update Users Data </h2>
+        <ol class="breadcrumb bg-gradient bg-dark p-2 mx-auto mt-5 w-50">
+            <li class="breadcrumb-item"><a class="text-decoration-none text-danger" href="<?php echo users('index.php') ?>">Users</a></li>
+            <li class="breadcrumb-item active ">Edit User</li>
+        </ol>
+
+        <h4 class="bg-gradient bg-dark p-2 mx-auto mt-5 w-50 text-danger">
+            <?php
+            if (isset($_SESSION['errmessages'])) {
+
+                foreach ($_SESSION['errmessages'] as $key =>  $data) {
+
+                    echo '* ' . $key . ' : ' . $data . '<br>';
+                }
+
+                unset($_SESSION['errmessages']);
+            } else {
+                echo "Fill the inputs Please!";
+            }
+            ?>
+        </h4>
         <form action="edit.php?id=<?php echo $data['id']; ?>" method="POST" class="container mx-auto mt-5 d-flex flex-column  p-4 ps-0 ">
             <div class="col-sm-12 m-3 ">
                 <div class=" form-floating">

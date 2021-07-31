@@ -1,18 +1,21 @@
 <?php
 
 require "../../helpers/paths.php";
-require '../../helpers/dbConnection.php' ;
+require '../../helpers/dbConnection.php';
+require "../../helpers/functions.php";
 require '../../checklogin/checkLoginadmin.php';
 
 
 $id = $_GET['id'];
 
-$id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+$id = Sanitize($id, 1);
 
 $message = '';
 
-if (filter_var($id, FILTER_VALIDATE_INT)) {
+if (!Validator($id, 3)) {
 
+    $message = "Invalid id";
+} else {
     $sql = "delete from users where id =" . $id;
 
     $op = mysqli_query($con, $sql);
@@ -24,11 +27,9 @@ if (filter_var($id, FILTER_VALIDATE_INT)) {
 
         $message = "Error Try Again !!!";
     }
-} else {
-    $message = "Invalid id";
 }
 
 
 $_SESSION['message'] = $message;
 
-header("Location: ". users('index.php'));
+header("Location: " . users('index.php'));

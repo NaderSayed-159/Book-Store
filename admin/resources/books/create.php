@@ -1,6 +1,7 @@
 <?php
 ob_start();
 require "../../../helpers/paths.php";
+require "../../../helpers/functions.php";
 require '../../../helpers/dbConnection.php';
 require '../../../checklogin/checkLoginadmin.php';
 require '../../../layout/navAdmin.php';
@@ -17,16 +18,6 @@ $sqlusers = "select * from users";
 $opusers =  mysqli_query($con, $sqlusers);
 
 
-
-function cleanInputs($input)
-{
-
-    $input = trim($input);
-    $input = stripcslashes($input);
-    $input = htmlspecialchars($input);
-
-    return $input;
-}
 $errorMessages = [];
 
 
@@ -34,80 +25,68 @@ $errorMessages = [];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $name  = cleanInputs($_POST['name']);
+    $name  = cleanInputs(Sanitize($_POST['name'], 2));
     $describtion = cleanInputs($_POST['describtion']);
     $download = cleanInputs($_POST['download']);
-    $category = $_POST['category'];
-    $adder = $_POST['adder'];
+    $category = Sanitize($_POST['category'], 1);
+    $adder = Sanitize($_POST['adder'], 1);
 
 
 
     //Name Validation
-    if (!empty($name)) {
-
-        if (strlen($name) < 5) {
-            $errorMessages['Book name'] = "Name Length must be > 5 ";
-        }
-    } else {
-        $errorMessages['Book name'] = "Required";
+    if (!Validator($name, 1)) {
+        $errorMessages['name'] = "Required";
     }
 
+    if (!Validator($name, 2, 5)) {
+
+        $errorMessages['name'] = "Book name Length must be more than 5 ";
+    }
 
     //describtion Validation
 
-    if (!empty($describtion)) {
 
-        if (strlen($describtion) < 10) {
-            $errorMessages['Book describtion'] = "Name Length must be > 10 ";
-        }
-    } else {
+    if (!Validator($describtion, 1)) {
         $errorMessages['Book describtion'] = "Required";
     }
 
+    if (!Validator($describtion, 2, 10)) {
+
+        $errorMessages['name'] = "Book name Length must be more than 10 ";
+    }
+
+
 
     // download Validation  
-    if (!empty($download)) {
-
-        if (!filter_var($download, FILTER_VALIDATE_URL)) {
-
-            $errorMessages['URL'] = "Invalid URL ";
-        }
-    } else {
+    if (!Validator($download, 1)) {
 
         $errorMessages[' Download URL'] = "Required";
     }
 
 
+    if (!Validator($download, 6)) {
 
+        $errorMessages['URL'] = "Invalid URL ";
+    }
 
 
 
     // cover Validation 
-    if (!empty($_FILES['cover']['name']) && isset($_FILES['cover']['name'])) {
+
+    $covername = $_FILES['cover']['name'];
 
 
-        $tmp_path = $_FILES['cover']['tmp_name'];
-        $covername = $_FILES['cover']['name'];
 
-
+    if (!Validator($covername, 1)) {
+        $errorMessages['Cover'] = 'pls upload cover';
+    } else {
         $nameArray = explode('.', $covername);
+
         $fileExtension = strtolower($nameArray[1]);
 
-        $CoverName = rand() . time() . '.' . $fileExtension;
-
-        $allowedExtensions = ['png', 'jpg'];
-
-        if (in_array($fileExtension, $allowedExtensions)) {
-
-            $disFolder =  '../../../assests/images/booksCovers/';
-
-            $disPath  = $disFolder . $CoverName;
-            move_uploaded_file($tmp_path, $disPath);
-        } else {
-            $errorMessages['Cover'] = '* extension not allowed';
+        if (!Validator($fileExtension, 5)) {
+            $errorMessages['imageExtension'] = 'Invalid Image Extension';
         }
-    } else {
-        $errorMessages['Cover'] = 'pls upload cover';
     }
 
 
@@ -116,27 +95,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 
-    if (count($errorMessages) == 0) {
-
-
-
-        $sql = "insert into books (book_name,book_category,describtion,download,coverPic,book_adder) values ('$name',$category,'$describtion','$download','$CoverName','$adder')";
-        $op =  mysqli_query($con, $sql);
-
-
-
-        if ($op) {
-            $_SESSION['message'] = "Data Inserted";
-            header("Location: " . resources('books/index.php'));
-        } else {
-            echo "Error in Your Sql Try Again";
-        }
+    if (count($errorMessages) > 0) {
+        $_SESSION['errmessages'] = $errorMessages;
     } else {
+        //cover Uploading
+        $tmp_path = $_FILES['cover']['tmp_name'];
+        $CoverName = rand() . time() . '.' . $fileExtension;
+        $disFolder =  '../../../assests/images/booksCovers/';
 
-        foreach ($errorMessages as $key => $value) {
+        $disPath  = $disFolder . $CoverName;
+        if (move_uploaded_file($tmp_path, $disPath)) {
 
-            echo '* ' . $key . ' : ' . $value . '<br>';
+            $describtion = str_replace("'", '_', $describtion);
+
+
+            //database operation
+
+            $sql = "insert into books (book_name,book_category,describtion,download,coverPic,book_adder) values ('$name',$category,'$describtion','$download','$CoverName','$adder')";
+            $op =  mysqli_query($con, $sql);
+
+            if ($op) {
+                $_SESSION['message'] = "Data Inserted";
+                header("Location: " . resources('books/index.php'));
+            } else {
+                $_SESSION['errmessages'] = "Error in Your Sql Try Again";
+            }
         }
+
+        $_SESSION['errmessages'] = $errorMessages;
     }
 }
 
@@ -160,21 +146,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adding Data to database</title>
     <link rel="stylesheet" href="<?php echo css('create.css') ?>">
-    <style>
-        .shows {
-            text-align: center;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%) translateY(-125%);
-        }
-    </style>
+
 </head>
 
 <body class="col-12">
     <h1 class="text-danger">Add a new Book to Database
         <small>Create a new book </small>
     </h1>
-    <a href="<?php echo resources('books/index.php') ?>" class="btn btn-success shows">Show Books</a>
+    <ol class="breadcrumb bg-gradient bg-dark p-2 mx-auto mt-5 w-50 ">
+        <li class="breadcrumb-item"><a class="text-decoration-none text-danger" href="<?php echo users('index.php') ?>">Books</a></li>
+        <li class="breadcrumb-item active ">Add Book</li>
+    </ol>
+
+    <h4 class="bg-gradient bg-dark p-2 mx-auto mt-5 w-50 text-danger">
+        <?php
+        if (isset($_SESSION['errmessages'])) {
+
+            foreach ($_SESSION['errmessages'] as $key =>  $data) {
+
+                echo '* ' . $key . ' : ' . $data . '<br>';
+            }
+
+            unset($_SESSION['errmessages']);
+        } else {
+            echo "Fill the inputs Please!";
+        }
+        ?>
+    </h4>
     <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" class="container col-8 mx-auto mt-5 d-flex flex-column  p-4 ps-0 " enctype="multipart/form-data">
         <div class="col-sm-12 m-3 ">
             <div class=" form-floating">

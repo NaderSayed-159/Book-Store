@@ -1,6 +1,7 @@
 <?php
 ob_start();
 require "../../../helpers/paths.php";
+require "../../../helpers/functions.php";
 require '../../../helpers/dbConnection.php';
 require '../../../checklogin/checkLoginadmin.php';
 require '../../../layout/navAdmin.php';
@@ -8,76 +9,68 @@ require '../../../layout/navAdmin.php';
 
 
 
-$id = $_GET['id'];
-$id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
-
-$message = "";
-
-if (!filter_var($id, FILTER_VALIDATE_INT)) {
-
-    $_SESSION['message'] = "Invalid Id";
-
-    header("Locattion: index.php");
-}
-
-
-function cleanInputs($input)
-{
-
-    $input = trim($input);
-    $input = stripcslashes($input);
-    $input = htmlspecialchars($input);
-
-    return $input;
-}
 $errorMessages = [];
+
+$id = $_GET['id'];
+$id  = Sanitize($_GET['id'], 1);
+
+
+if (!Validator($id, 3)) {
+    $errorMessages['id'] = "Invalid ID";
+
+    $_SESSION['message'] = $errorMessages;
+
+    header("Locattion: " . resources('books/index.php'));
+}
 
 
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $name  = cleanInputs($_POST['name']);
+    $name  = cleanInputs(Sanitize($_POST['name'], 2));
     $describtion = cleanInputs($_POST['describtion']);
     $download = cleanInputs($_POST['download']);
-    $category = $_POST['category'];
-    $adder = $_POST['adder'];
+    $category = Sanitize($_POST['category'], 1);
+    $adder = Sanitize($_POST['adder'], 1);
+
 
 
 
     //Name Validation
-    if (!empty($name)) {
-
-        if (strlen($name) < 5) {
-            $errorMessages['Book name'] = "Name Length must be > 5 ";
-        }
-    } else {
-        $errorMessages['Book name'] = "Required";
+    if (!Validator($name, 1)) {
+        $errorMessages['name'] = "Required";
     }
 
+    if (!Validator($name, 2, 5)) {
+
+        $errorMessages['name'] = "Book name Length must be more than 5 ";
+    }
 
     //describtion Validation
 
-    if (!empty($describtion)) {
 
-        if (strlen($describtion) < 10) {
-            $errorMessages['Book describtion'] = "Name Length must be > 10 ";
-        }
-    } else {
+    if (!Validator($describtion, 1)) {
         $errorMessages['Book describtion'] = "Required";
     }
 
+    if (!Validator($describtion, 2, 10)) {
+
+        $errorMessages['name'] = "Book name Length must be more than 10 ";
+    }
+
+
 
     // download Validation  
-    if (!empty($download)) {
-
-        if (!filter_var($download, FILTER_VALIDATE_URL)) {
-
-            $errorMessages['URL'] = "Invalid URL ";
-        }
-    } else {
+    if (!Validator($download, 1)) {
 
         $errorMessages[' Download URL'] = "Required";
+    }
+
+
+    if (!Validator($download, 6)) {
+
+        $errorMessages['URL'] = "Invalid URL ";
     }
 
 
@@ -86,21 +79,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $dataimg = mysqli_fetch_assoc($opimg);
 
     // cover Validation 
-    if (!empty($_FILES['cover']['name']) && isset($_FILES['cover']['name'])) {
 
+    $covername = $_FILES['cover']['name'];
 
-        $tmp_path = $_FILES['cover']['tmp_name'];
-        $covername = $_FILES['cover']['name'];
-
+    if (!Validator($covername, 1)) {
+        $CoverName = $dataimg['coverPic'];
+    } else {
 
         $nameArray = explode('.', $covername);
         $fileExtension = strtolower($nameArray[1]);
+        if (!Validator($fileExtension, 5)) {
+            $errorMessages['imageExtension'] = 'Invalid Image Extension';
+        }
+    }
 
-        $CoverName = rand() . time() . '.' . $fileExtension;
 
-        $allowedExtensions = ['png', 'jpg'];
 
-        if (in_array($fileExtension, $allowedExtensions)) {
+
+
+    if (count($errorMessages) > 0) {
+        $_SESSION['errmessages'] = $errorMessages;
+    } else {
+        //cover edit
+        if (Validator($covername, 1)) {
+
+
+            $tmp_path = $_FILES['cover']['tmp_name'];
+            $CoverName = rand() . time() . '.' . $fileExtension;
+
+
+
 
             $disFolder =  '../../../assests/images/booksCovers/';
 
@@ -113,43 +121,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     unlink('../../../assests/images/booksCovers/' . trim($dataimg['coverPic']));
                 }
             }
-        } else {
-            $errorMessages['Cover'] = '* extension not allowed';
         }
-    } else {
-
-        $CoverName = $dataimg['coverPic'];
-    }
 
 
+        if (count($errorMessages) == 0) {
 
+            $sql = "update books set book_name= ' $name', describtion = '$describtion' , book_category = $category , Download ='$download', coverPic = ' $CoverName', book_adder = $adder where id =$id";
 
-
+            $op =  mysqli_query($con, $sql);
 
 
 
-
-    if (count($errorMessages) == 0) {
-
-
-        $sql = "update books set book_name= ' $name', describtion = '$describtion' , book_category = $category , Download ='$download', coverPic = ' $CoverName', book_adder = $adder where id =$id";
-
-        $op =  mysqli_query($con, $sql);
-
-
-
-        if ($op) {
-            $_SESSION['message'] = "Data Updated";
-            header("Location: " . resources('books/index.php'));
-        } else {
-            echo "Error in Your Sql Try Again";
+            if ($op) {
+                $_SESSION['message'] = "Data Updated";
+                header("Location: " . resources('books/index.php'));
+            } else {
+                $errorMessages['SQL Errror'] = "Error in Your Sql Try Again";
+            }
         }
-    } else {
 
-        foreach ($errorMessages as $key => $value) {
-
-            echo '* ' . $key . ' : ' . $value . '<br>';
-        }
+        $_SESSION['errmessages'] = $errorMessages;
     }
 }
 
@@ -168,15 +159,6 @@ $opusers =  mysqli_query($con, $sqlusers);
 $sqlbook = "select * from books where id =$id";
 $opbooks =  mysqli_query($con, $sqlbook);
 $databook = mysqli_fetch_assoc($opbooks);
-
-
-
-
-
-
-
-
-
 
 
 ?>
@@ -198,6 +180,26 @@ $databook = mysqli_fetch_assoc($opbooks);
     <h1 class="text-danger">Update Book data
         <small>Update Book by Admin! </small>
     </h1>
+    <ol class="breadcrumb bg-gradient bg-dark p-2 mx-auto mt-5 w-50 ">
+        <li class="breadcrumb-item"><a class="text-decoration-none text-danger" href="<?php echo users('index.php') ?>">Books</a></li>
+        <li class="breadcrumb-item active ">Edit Book Data</li>
+    </ol>
+
+    <h4 class="bg-gradient bg-dark p-2 mx-auto mt-5 w-50 text-danger">
+        <?php
+        if (isset($_SESSION['errmessages'])) {
+
+            foreach ($_SESSION['errmessages'] as $key =>  $data) {
+
+                echo '* ' . $key . ' : ' . $data . '<br>';
+            }
+
+            unset($_SESSION['errmessages']);
+        } else {
+            echo "Fill the inputs Please!";
+        }
+        ?>
+    </h4>
     <div class="d-flex flex-column flex-lg-row col-12 justify-content-evenly align-items-center">
         <form action="edit.php?id=<?php echo $databook['id']; ?>" method="POST" class=" col-lg-7 col-10  d-flex flex-column  p-4 ps-0 " enctype="multipart/form-data">
             <div class="col-sm-12 m-3 ">

@@ -1,26 +1,27 @@
 <?php
 
 require "../../../helpers/paths.php";
+require "../../../helpers/functions.php";
 require '../../../helpers/dbConnection.php';
 require '../../../checklogin/checkLoginadmin.php';
 
-
 $id = $_GET['id'];
 
-$id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+$id = Sanitize($id, 1);
 
 $message = '';
 
-if (filter_var($id, FILTER_VALIDATE_INT)) {
-
+if (!Validator($id, 3)) {
+    $message = "Invalid id";
+} else {
     $sqlimg = "select coverPic from books where id = " . $id;
     $opimg  = mysqli_query($con, $sqlimg);
     $dataimg = mysqli_fetch_assoc($opimg);
 
 
-    if (file_exists('../../../assests/images/booksCovers/' . $dataimg['coverPic'])) {
+    if (file_exists('../../../assests/images/booksCovers/' . trim($dataimg['coverPic']))) {
 
-        unlink('../../../assests/images/booksCovers/' . $dataimg['coverPic']);
+        unlink('../../../assests/images/booksCovers/' . trim($dataimg['coverPic']));
     } else {
         $message = "image is not deleted";
     }
@@ -36,9 +37,8 @@ if (filter_var($id, FILTER_VALIDATE_INT)) {
 
         $message = "Error Try Again !!!";
     }
-} else {
-    $message = "Invalid id";
 }
+
 
 
 $_SESSION['message'] = $message;

@@ -6,7 +6,7 @@ require '../../layout/navAdmin.php';
 require '../../checklogin/checkLoginadmin.php';
 
 
-$sql = "select  users.* ,usersTypes.id as userID , usersTypes.user_type as role from users inner join usersTypes on users.user_type = usersTypes.id  order by users.id asc ";
+$sql = "select  users.* ,usersTypes.id as userID , usersTypes.user_type as role from users inner join usersTypes on users.user_type = usersTypes.id  order by users.id desc ";
 $op = mysqli_query($con, $sql);
 
 
@@ -25,7 +25,13 @@ $op = mysqli_query($con, $sql);
         .container th,
         .container td {
             padding: 15px 10px !important;
+        }
 
+        .add {
+            text-align: center;
+            position: absolute;
+            left: 15%;
+            transform: translateX(-50%) translateY(-125%);
         }
     </style>
 </head>
@@ -42,6 +48,7 @@ $op = mysqli_query($con, $sql);
         ?>
 
     </h2>
+    <a href="<?php echo users('create.php') ?>" class="btn btn-danger add">Add New +</a>
 
     <table class="container">
         <thead>

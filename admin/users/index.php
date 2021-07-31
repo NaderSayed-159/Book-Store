@@ -1,8 +1,8 @@
 <?php
 
 require "../../helpers/paths.php";
-require '../../helpers/dbConnection.php' ;
-require '../../layout/navAdmin.php' ;
+require '../../helpers/dbConnection.php';
+require '../../layout/navAdmin.php';
 require '../../checklogin/checkLoginadmin.php';
 
 
@@ -20,7 +20,7 @@ $op = mysqli_query($con, $sql);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Users Display</title>
-    <link rel="stylesheet" href="<?php echo css('display.css')?>">
+    <link rel="stylesheet" href="<?php echo css('display.css') ?>">
     <style>
         .head {
             margin-top: 20px;
@@ -28,6 +28,12 @@ $op = mysqli_query($con, $sql);
 
         th h1 {
             text-align: center !important;
+        }
+
+        .container th,
+        .container td {
+            padding: 15px 10px !important;
+
         }
     </style>
 </head>
@@ -74,7 +80,7 @@ $op = mysqli_query($con, $sql);
         <tbody>
             <?php while ($data = mysqli_fetch_assoc($op)) { ?>
 
-                <tr>
+                <tr class="text-center">
                     <td><?php echo $data['id']; ?></td>
                     <td><?php echo $data['name']; ?></td>
                     <td><?php echo $data['email']; ?></td>
@@ -82,8 +88,8 @@ $op = mysqli_query($con, $sql);
                     <td><?php echo $data['gender']; ?></td>
                     <td><?php echo $data['role']; ?></td>
                     <td>
-                        <a href="delete.php?id=<?php echo $data['id'] ?>" class="btn btn-danger ">Delete</a>
-                        <a href="edit.php?id=<?php echo $data['id']; ?>" class="btn btn-success ">Edit</a>
+                        <a href="delete.php?id=<?php echo $data['id'] ?>" class="btn btn-danger m-2 ">Delete</a>
+                        <a href="edit.php?id=<?php echo $data['id']; ?>" class="btn btn-success m-2 ">Edit</a>
                     </td>
                 </tr>
             <?php } ?>

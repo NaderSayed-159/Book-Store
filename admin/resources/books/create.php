@@ -161,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Adding Data to database</title>
     <link rel="stylesheet" href="<?php echo css('create.css') ?>">
     <style>
-        .add {
+        .shows {
             text-align: center;
             position: absolute;
             left: 50%;
@@ -174,9 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <h1 class="text-danger">Add a new Book to Database
         <small>Create a new book </small>
     </h1>
-    <a href="<?php echo resources('books/index.php') ?>" class="btn btn-success add" style="    color: #fff ;
-    background-color: #dc3545;
-    border-color: #dc3545;">Show Books</a>
+    <a href="<?php echo resources('books/index.php') ?>" class="btn btn-success shows">Show Books</a>
     <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" class="container col-8 mx-auto mt-5 d-flex flex-column  p-4 ps-0 " enctype="multipart/form-data">
         <div class="col-sm-12 m-3 ">
             <div class=" form-floating">

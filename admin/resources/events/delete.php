@@ -1,8 +1,8 @@
 <?php
 
-require '../../../dbConnection.php';
-require '../../../checklogin/checkLogin.php';
-
+require "../../../helpers/paths.php";
+require '../../../helpers/dbConnection.php';
+require '../../../checklogin/checkLoginadmin.php';
 
 $id = $_GET['id'];
 
@@ -12,6 +12,17 @@ $message = '';
 
 if (filter_var($id, FILTER_VALIDATE_INT)) {
 
+
+    $sqlLogo = "select event_logo from events where id = " . $id;
+    $opLogo  = mysqli_query($con, $sqlLogo);
+    $dataLogo = mysqli_fetch_assoc($opLogo);
+
+    if (file_exists('../../../assests/images/eventsLogos/' . $dataLogo['event_logo'])) {
+
+        unlink('../../../assests/images/eventsLogos/' . $dataLogo['event_logo']);
+    } else {
+        $message = "image is not deleted";
+    }
     $sql = "delete from events where id =" . $id;
 
     $op = mysqli_query($con, $sql);

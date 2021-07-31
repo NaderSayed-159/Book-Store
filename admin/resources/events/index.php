@@ -1,7 +1,8 @@
 <?php
-require '../../../dbConnection.php';
-require "../headeradmin.php";
-require '../../../checklogin/checkLogin.php';
+require "../../../helpers/paths.php";
+require '../../../helpers/dbConnection.php';
+require '../../../layout/navAdmin.php';
+require '../../../checklogin/checkLoginadmin.php';
 
 
 $sql = "select events.* , users.id as userID , users.name as submiter from events join users on events.event_submiter = users.id order by events.id asc";
@@ -21,7 +22,7 @@ $op = mysqli_query($con, $sql);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Events Data</title>
-    <link rel="stylesheet" href="../../../css/display.css">
+    <link rel="stylesheet" href="<?php echo css('display.css') ?>">
     <style>
         .head {
             margin-top: 20px;
@@ -42,10 +43,6 @@ $op = mysqli_query($con, $sql);
         th h1 {
             text-align: center !important;
         }
-
-        td {
-            text-align: center !important;
-        }
     </style>
 </head>
 
@@ -62,7 +59,7 @@ $op = mysqli_query($con, $sql);
     </h2>
 
 
-    <a href="create.php" class="btn btn-danger add" style="    color: #fff ;
+    <a href="<?php echo resources('events/create.php') ?>" class="btn btn-danger add" style="    color: #fff ;
     background-color: #dc3545;
     border-color: #dc3545;">Add New +</a>
 
@@ -97,7 +94,7 @@ $op = mysqli_query($con, $sql);
         <tbody>
             <?php while ($data = mysqli_fetch_assoc($op)) { ?>
 
-                <tr>
+                <tr class="text-center">
                     <td><?php echo $data['id']; ?></td>
                     <td><?php echo $data['event_name']; ?></td>
                     <td style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis; width:8%"><?php echo $data['event_describtion']; ?></td>
@@ -105,8 +102,8 @@ $op = mysqli_query($con, $sql);
                     <td><?php echo $data['event_logo']; ?></td>
                     <td><?php echo $data['submiter']; ?></td>
                     <td>
-                        <a href="delete.php?id=<?php echo $data['id'] ?>" class="btn btn-danger ">Delete</a>
-                        <a href="edit.php?id=<?php echo $data['id']; ?>" class="btn btn-success ">Edit</a>
+                        <a href="delete.php?id=<?php echo $data['id'] ?>" class="btn btn-danger m-2 ">Delete</a>
+                        <a href="edit.php?id=<?php echo $data['id']; ?>" class="btn btn-success m-2 ">Edit</a>
                     </td>
                 </tr>
             <?php } ?>

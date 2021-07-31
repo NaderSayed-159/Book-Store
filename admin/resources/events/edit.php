@@ -1,9 +1,9 @@
 <?php
 ob_start();
-require '../../../dbConnection.php';
-require "../headeradmin.php";
-require '../../../checklogin/checkLogin.php';
-
+require "../../../helpers/paths.php";
+require '../../../helpers/dbConnection.php';
+require '../../../checklogin/checkLoginadmin.php';
+require '../../../layout/navAdmin.php';
 
 
 
@@ -68,15 +68,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errorMessages['event describtion'] = "Required";
     }
 
+
+    $sqllogo = "select event_logo from events where id = " . $id;
+    $oplogo  = mysqli_query($con, $sqllogo);
+    $dataLogo = mysqli_fetch_assoc($oplogo);
+
     // logo Validation 
     if (!empty($_FILES['logo']['name']) && isset($_FILES['logo']['name'])) {
 
 
         $tmp_path = $_FILES['logo']['tmp_name'];
-        $covername = $_FILES['logo']['name'];
+        $logoOldname = $_FILES['logo']['name'];
 
 
-        $nameArray = explode('.', $covername);
+        $nameArray = explode('.', $logoOldname);
         $fileExtension = strtolower($nameArray[1]);
 
         $LogoName = rand() . time() . '.' . $fileExtension;
@@ -85,15 +90,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if (in_array($fileExtension, $allowedExtensions)) {
 
-            $disFolder = './images/logos/';
+            $disFolder = '../../../assests/images/eventsLogos/';
 
             $disPath  = $disFolder . $LogoName;
-            move_uploaded_file($tmp_path, $disPath);
+
+            if (move_uploaded_file($tmp_path, $disPath)) {
+
+                if (file_exists('../../../assests/images/eventsLogos/' . trim($dataLogo['event_logo']))) {
+
+                    unlink('../../../assests/images/eventsLogos/' . trim($dataLogo['event_logo']));
+                }
+            }
         } else {
             $errorMessages['logo'] = '* extension not allowed';
         }
     } else {
-        $LogoName =  $dataevent['event_logo'];
+        $LogoName =  $dataLogo['event_logo'];
     }
 
 
@@ -115,13 +127,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 
-
-
-
-
-
-
-
     if (count($errorMessages) == 0) {
 
 
@@ -133,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($op) {
             $_SESSION['message'] = "Data Updated";
-            header("Location: index.php");
+            header("Location: " . resources('events/index.php'));
         } else {
             echo "Error in Your Sql Try Again";
         }
@@ -175,7 +180,7 @@ $dataevent = mysqli_fetch_assoc($opevents);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Event to Accept it</title>
-    <link rel="stylesheet" href="../../../css/edit.css">
+    <link rel="stylesheet" href="<?php echo css('edit.css') ?>">
 
 </head>
 
@@ -221,7 +226,7 @@ $dataevent = mysqli_fetch_assoc($opevents);
                 <div class="col-lg-5 col-12 m-3 ">
                     <div class="col-sm-12 m-3 form-control">
                         <label for="floatingnput">Change Event Logo</label>
-                        <input type="file" name="cover" class="form-control">
+                        <input type="file" name="logo   " class="form-control">
                     </div>
                 </div>
             </div>
@@ -255,7 +260,7 @@ $dataevent = mysqli_fetch_assoc($opevents);
             <div class="card-body bg-warning">
                 <p class="card-text text-danger text-center fw-bold fs-4">Logo</p>
             </div>
-            <img src="<?php echo "./images/logos/" . trim($dataevent['event_logo']) ?>" class="card-img-top" alt="logo">
+            <img src="<?php echo images('eventsLogos/') . trim($dataevent['event_logo']) ?>" class="card-img-top" alt="logo">
         </div>
     </div>
 

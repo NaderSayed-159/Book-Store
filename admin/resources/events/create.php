@@ -1,9 +1,9 @@
 <?php
 ob_start();
-require '../../../dbConnection.php';
-require "../headeradmin.php";
-require '../../../checklogin/checkLogin.php';
-
+require "../../../helpers/paths.php";
+require '../../../helpers/dbConnection.php';
+require '../../../checklogin/checkLoginadmin.php';
+require '../../../layout/navAdmin.php';
 
 
 //users
@@ -60,10 +60,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
         $tmp_path = $_FILES['logo']['tmp_name'];
-        $covername = $_FILES['logo']['name'];
+        $logooldName = $_FILES['logo']['name'];
 
 
-        $nameArray = explode('.', $covername);
+        $nameArray = explode('.', $logooldName);
         $fileExtension = strtolower($nameArray[1]);
 
         $LogoName = rand() . time() . '.' . $fileExtension;
@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if (in_array($fileExtension, $allowedExtensions)) {
 
-            $disFolder = './images/logos/';
+            $disFolder = '../../../assests/images/eventsLogos/';
 
             $disPath  = $disFolder . $LogoName;
             move_uploaded_file($tmp_path, $disPath);
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
         if ($ops) {
-            echo 'data inserted';
+            echo 'Data inserted';
             $_SESSION['message'] = "Data Inserted";
             header("Location: index.php");
         } else {
@@ -146,8 +146,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adding Data to database</title>
+    <link rel="stylesheet" href="<?php echo css('create.css') ?>">
 
-    <link rel="stylesheet" href="../../../css/create.css">
+    <style>
+        .shows {
+            text-align: center;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%) translateY(-125%);
+        }
+    </style>
+
 </head>
 
 <body class="col-12">
@@ -155,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <h1 class="text-danger">Add a new Event to Database
         <small>Create a new Event </small>
     </h1>
-
+    <a href="<?php echo resources('books/index.php') ?>" class="btn btn-success shows">Show events</a>
     <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" class="container col-8 mx-auto mt-5 d-flex flex-column  p-4 ps-0 " enctype="multipart/form-data">
         <div class="col-sm-12 m-3 ">
             <div class=" form-floating">

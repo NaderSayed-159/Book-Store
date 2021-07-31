@@ -22,7 +22,7 @@ if (filter_var($id, FILTER_VALIDATE_INT)) {
 
         unlink('../../../assests/images/booksCovers/' . $dataimg['coverPic']);
     } else {
-        $message = "image is not delete";
+        $message = "image is not deleted";
     }
 
     $sql = "delete from books where id =" . $id;

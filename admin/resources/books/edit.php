@@ -102,8 +102,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if (in_array($fileExtension, $allowedExtensions)) {
 
-
-
             $disFolder =  '../../../assests/images/booksCovers/';
 
             $disPath  = $disFolder . $CoverName;
@@ -142,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($op) {
             $_SESSION['message'] = "Data Updated";
-            header("Location: index.php");
+            header("Location: " . resources('books/index.php'));
         } else {
             echo "Error in Your Sql Try Again";
         }

@@ -1,29 +1,25 @@
 <?php
 require "../../../helpers/paths.php";
+require "../../../helpers/functions.php";
 require '../../../helpers/dbConnection.php';
 require '../../../checklogin/checkLoginadmin.php';
 require '../../../layout/navAdmin.php';
 
 
 
-$id = $_GET['id'];
 
-$id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+$id = $_GET['id'];
+$id  = Sanitize($_GET['id'], 1);
 
 $message = '';
 
-if (filter_var($id, FILTER_VALIDATE_INT)) {
+if (!Validator($id, 3)) {
+    $_SESSION['message'] = $errorMessages;
 
-
+    header("Location: " . resources('eventsReservations/index.php'));
+} else {
     $sql = "select events.* , users.id as userID , users.name as submiter from events join users on events.event_submiter = users.id where events.id= $id ";
     $op = mysqli_query($con, $sql);
-    // $fetched = mysqli_fetch_assoc($op);
-
-
-    // $sqlimage = "select event_logo from events where id=" . $id;
-    // $opimage =   mysqli_query($con, $sqlimage);
-
-    // $dataimg =    mysqli_fetch_assoc($opimage);
 }
 
 
@@ -81,10 +77,10 @@ if (filter_var($id, FILTER_VALIDATE_INT)) {
 
     </h2>
 
-
-    <a href="index.php" class="btn btn-danger add" style="    color: #fff ;
-    background-color: #dc3545;
-    border-color: #dc3545;">Back to reservations &gt;</a>
+    <ol class="breadcrumb bg-gradient bg-dark p-2 mx-auto mt-5 w-50 ">
+        <li class="breadcrumb-item"><a class="text-decoration-none text-danger" href="<?php echo resources('eventsReservations/index.php') ?>">Events Reservations</a></li>
+        <li class="breadcrumb-item active ">Events Details</li>
+    </ol>
     <div class="d-flex flex-column justify-content-space-between">
 
         <table class="container">

@@ -1,6 +1,7 @@
 <?php
 ob_start();
 require "../../../helpers/paths.php";
+require "../../../helpers/functions.php";
 require '../../../helpers/dbConnection.php';
 require '../../../checklogin/checkLoginadmin.php';
 require '../../../layout/navAdmin.php';
@@ -8,7 +9,7 @@ require '../../../layout/navAdmin.php';
 
 
 //users
-$sqlusers = "select * from users";
+$sqlusers = "select * from users where user_type > 1";
 $opusers =  mysqli_query($con, $sqlusers);
 
 //events
@@ -17,54 +18,46 @@ $opevents =  mysqli_query($con, $sqlevents);
 
 
 
-function cleanInputs($input)
-{
-
-    $input = trim($input);
-    $input = stripcslashes($input);
-    $input = htmlspecialchars($input);
-
-    return $input;
-}
 $errorMessages = [];
-
 
 
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $event  = cleanInputs($_POST['event']);
-    $enroller = cleanInputs($_POST['enroller']);
+    $event  = cleanInputs(Sanitize($_POST['event'], 1));
+    $enroller = cleanInputs(Sanitize($_POST['enroller'], 1));
 
 
     //event validation
-    if (!empty($event)) {
 
-        if (!filter_var($event, FILTER_VALIDATE_INT)) {
+    if (!Validator($event, 1)) {
 
-            $errorMessages['event'] = "Invalid department";
-        }
-    } else {
-        $errorMessages['event'] = "Invalid department";
+        $errorMessages['event'] = "Choose Event";
+    }
+    if (!Validator($event, 3)) {
+
+        $errorMessages['event'] = "Invalid Event";
     }
 
 
     //enroller validation
 
-    if (!empty($enroller)) {
+    if (!Validator($enroller, 1)) {
 
-        if (!filter_var($enroller, FILTER_VALIDATE_INT)) {
+        $errorMessages['event'] = "Choose enroller";
+    }
+    if (!Validator($enroller, 3)) {
 
-            $errorMessages['enroller'] = "Invalid department";
-        }
-    } else {
-        $errorMessages['enroller'] = "Invalid department";
+        $errorMessages['event'] = "Invalid enroller";
     }
 
 
-    if (count($errorMessages) == 0) {
 
+    if (count($errorMessages) > 0) {
+
+        $_SESSION['errmessages'] = $errorMessages;
+    } else {
 
         $sql = "insert into e_reservation (event_id,enroller) values ($event,$enroller)";
         $ops =  mysqli_query($con, $sql);
@@ -72,18 +65,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
         if ($ops) {
-            echo 'data inserted';
+
             $_SESSION['message'] = "Reservation Done";
             header("Location: " . resources('eventsReservations/index.php'));
         } else {
-            echo "Error in Your Sql Try Again";
+            $errorMessages = "Error in Your Sql Try Again";
         }
-    } else {
 
-        foreach ($errorMessages as $key => $value) {
 
-            echo '* ' . $key . ' : ' . $value . '<br>';
-        }
+        $_SESSION['errmessages'] = $errorMessages;
     }
 }
 
@@ -108,8 +98,7 @@ $dataevent = mysqli_fetch_assoc($oplogo);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adding Data to database</title>
-
+    <title>Adding Event Reservation </title>
     <link rel="stylesheet" href="<?php echo css('create.css') ?>">
 </head>
 
@@ -118,6 +107,27 @@ $dataevent = mysqli_fetch_assoc($oplogo);
     <h1 class="text-danger">Add a new Event to Database
         <small>Create a new Event </small>
     </h1>
+
+    <ol class="breadcrumb bg-gradient bg-dark p-2 mx-auto mt-5 w-50 ">
+        <li class="breadcrumb-item"><a class="text-decoration-none text-danger" href="<?php echo resources('eventsReservations/index.php') ?>">Events Reservations</a></li>
+        <li class="breadcrumb-item active ">Add Event Reservation</li>
+    </ol>
+
+    <h4 class="bg-gradient bg-dark p-2 mx-auto mt-5 w-50 text-danger">
+        <?php
+        if (isset($_SESSION['errmessages'])) {
+
+            foreach ($_SESSION['errmessages'] as $key =>  $data) {
+
+                echo '* ' . $key . ' : ' . $data . '<br>';
+            }
+
+            unset($_SESSION['errmessages']);
+        } else {
+            echo "Fill the inputs Please!";
+        }
+        ?>
+    </h4>
     <div class=" mx-5 d-flex flex-column flex-lg-row col-lg-8 col-12 justify-content-between align-items-center">
 
         <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" class="  col-8 mx-auto mt-5 d-flex align-items-center flex-column  p-4 ps-0 " enctype="multipart/form-data">
@@ -140,6 +150,7 @@ $dataevent = mysqli_fetch_assoc($oplogo);
                 <div class=" form-control p-2  ">
                     <label for="adder" class="p-2">Event Submiter </label>
                     <select id="adder" class="form-select" name="enroller">
+                        <option value=""></option>
                         <?php while ($datauser = mysqli_fetch_assoc($opusers)) {
                         ?>
                             <option value="<?php echo $datauser['id']; ?>"><?php echo $datauser['name']; ?> </option>

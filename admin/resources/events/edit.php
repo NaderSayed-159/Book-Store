@@ -15,7 +15,7 @@ if (!Validator($id, 3)) {
 
     $_SESSION['message'] = $errorMessages;
 
-    header("Locattion: " . resources('events/index.php'));
+    header("Location: " . resources('events/index.php'));
 }
 
 
@@ -117,6 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
         }
+        $_SESSION['errmessages'] = $errorMessages;
 
 
         if (count($errorMessages) == 0) {

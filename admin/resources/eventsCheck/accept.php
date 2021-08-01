@@ -1,17 +1,21 @@
 <?php
 
 require "../../../helpers/paths.php";
+require "../../../helpers/functions.php";
 require '../../../helpers/dbConnection.php';
 require '../../../checklogin/checkLoginadmin.php';
 
 
 $id = $_GET['id'];
 
-$id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+$id = Sanitize($id, 1);
 
 $message = '';
 
-if (filter_var($id, FILTER_VALIDATE_INT)) {
+if (!Validator($id, 3)) {
+
+    $message = "Invalid id";
+} else {
 
     //event_check
     $sqlchecks = "select * from events_check where id = $id";
@@ -35,17 +39,16 @@ if (filter_var($id, FILTER_VALIDATE_INT)) {
         $disOld  = '../../../assests/images/eventsCheckLogos/' . trim($eventlogo);
         $disFolder = '../../../assests/images/eventsLogos/' . trim($eventlogo);
 
-        rename($disOld, $disFolder);
+        if (rename($disOld, $disFolder)) {
 
-        $message = "Event Added";
+            $message = "Event Added";
 
-        $sqldel = "delete from events_check where id =" . $id;
-        $opdel = mysqli_query($con, $sqldel);
+            $sqldel = "delete from events_check where id =" . $id;
+            $opdel = mysqli_query($con, $sqldel);
+        }
     } else {
         $message = "Error Try Again !!!";
     }
-} else {
-    $message = "Invalid id";
 }
 
 

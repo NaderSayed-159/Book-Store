@@ -14,7 +14,7 @@ if (!filter_var($id, FILTER_VALIDATE_INT)) {
 
     $_SESSION['message'] = "Invalid Id";
 
-    header("Locattion: index.php");
+    header("Location: index.php");
 }
 
 //users

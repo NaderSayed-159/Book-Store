@@ -1,6 +1,7 @@
 <?php
 ob_start();
 require "../../../helpers/paths.php";
+require "../../../helpers/functions.php";
 require '../../../helpers/dbConnection.php';
 require '../../../checklogin/checkLoginadmin.php';
 require '../../../layout/navAdmin.php';
@@ -8,17 +9,15 @@ require '../../../layout/navAdmin.php';
 
 
 
-
 $id = $_GET['id'];
-$id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+$id  = Sanitize($_GET['id'], 1);
 
-$message = "";
 
-if (!filter_var($id, FILTER_VALIDATE_INT)) {
+if (!Validator($id, 3)) {
 
-    $_SESSION['message'] = "Invalid Id";
+    $_SESSION['message'] = $errorMessages;
 
-    header("Locattion: " . resources('eventsCheck/index.php'));
+    header("Location: " . resources('eventsCheck/index.php'));
 }
 
 // events
@@ -27,15 +26,7 @@ $opevents =  mysqli_query($con, $sqlevent);
 $dataevent = mysqli_fetch_assoc($opevents);
 
 
-function cleanInputs($input)
-{
 
-    $input = trim($input);
-    $input = stripcslashes($input);
-    $input = htmlspecialchars($input);
-
-    return $input;
-}
 $errorMessages = [];
 
 
@@ -70,98 +61,90 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errorMessages['event describtion'] = "Required";
     }
 
-    // logo Validation 
 
-    $sqllogo = "select e_logo from events_check where id = " . $id;
-    $oplogo  = mysqli_query($con, $sqllogo);
-    $dataLogo = mysqli_fetch_assoc($oplogo);
-
-    if (!empty($_FILES['logo']['name']) && isset($_FILES['logo']['name'])) {
-
-
-        $tmp_path = $_FILES['logo']['tmp_name'];
-        $logoOldname = $_FILES['logo']['name'];
-
-
-        $nameArray = explode('.', $logoOldname);
-        $fileExtension = strtolower($nameArray[1]);
-
-        $LogoName = rand() . time() . '.' . $fileExtension;
-
-        $allowedExtensions = ['png', 'jpg'];
-
-        if (in_array($fileExtension, $allowedExtensions)) {
-
-            $disFolder = '../../../assests/images/eventsCheckLogos/';
-
-            $disPath  = $disFolder . $LogoName;
-
-            if (move_uploaded_file($tmp_path, $disPath)) {
-
-                if (file_exists('../../../assests/images/eventsCheckLogos/' . trim($dataLogo['event_logo']))) {
-
-                    unlink('../../../assests/images/eventsCheckLogos/' . trim($dataLogo['event_logo']));
-                }
-            }
-        } else {
-            $errorMessages['logo'] = '* extension not allowed';
-        }
-    } else {
-        $LogoName =  $dataevent['e_logo'];
-    }
 
 
     //date Validation
     $validDate = strtotime(date("m/d/y"));
 
 
-    if (!empty($edate)) {
+    if (!Validator($edate, 1)) {
+
+        $edate = $dataevent['e_date'];
+    } else {
 
         if ($edate < $validDate) {
             $errorMessages['Date'] =  "not valid date";
         } else {
             $edate = date('Y-m-d-H-i-s', $edate);
         }
-    } else {
-
-        $edate = $dataevent['e_date'];
     }
 
 
+    // logo Validation 
+
+    $sqllogo = "select e_logo from events_check where id = " . $id;
+    $oplogo  = mysqli_query($con, $sqllogo);
+    $dataLogos = mysqli_fetch_assoc($oplogo);
 
 
+    $logooldName = $_FILES['logo']['name'];
 
-
-
-
-
-
-    if (count($errorMessages) == 0) {
-
-
-        $sql = "update events_check set event_name= '$name', event_desc = '$describtion' , e_date = '$edate' , e_logo ='$LogoName', event_submiter = $adder where id =$id";
-
-        $op =  mysqli_query($con, $sql);
-
-
-
-        if ($op) {
-            $_SESSION['message'] = "Data Updated";
-            header("Location:" . resources('eventsCheck/index.php'));
-        } else {
-            echo "Error in Your Sql Try Again";
-        }
+    if (!Validator($logooldName, 1)) {
+        $LogoName =  $dataLogos['e_logo'];
     } else {
+        $nameArray = explode('.', $logooldName);
+        $fileExtension = strtolower($nameArray[1]);
 
-        foreach ($errorMessages as $key => $value) {
+        if (!Validator($fileExtension, 5)) {
+            $errorMessages['imageExtension'] = 'Invalid Image Extension';
+        }
+    }
 
-            echo '* ' . $key . ' : ' . $value . '<br>';
+
+    if (count($errorMessages) > 0) {
+        $_SESSION['errmessages'] = $errorMessages;
+    } else {
+        //logo edit
+        if (Validator($logooldName, 1)) {
+
+
+            $tmp_path = $_FILES['logo']['tmp_name'];
+            $LogoName = rand() . time() . '.' . $fileExtension;
+
+            $disFolder = '../../../assests/images/eventsCheckLogos/';
+            $disPath  = $disFolder . $LogoName;
+
+            if (move_uploaded_file($tmp_path, $disPath)) {
+
+                if (!Validator('../../../assests/images/eventsCheckLogos/' . trim($dataLogos['e_logo']), 7)) {
+
+                    $errorMessages['imageChange'] = "image is not deleted";
+                }
+            }
+
+
+            if (count($errorMessages) == 0) {
+
+
+                $sql = "update events_check set event_name= '$name', event_desc = '$describtion' , e_date = '$edate' , e_logo ='$LogoName', event_submiter = $adder where id =$id";
+
+                $op =  mysqli_query($con, $sql);
+
+
+
+                if ($op) {
+                    $_SESSION['message'] = "Data Updated";
+                    header("Location: " . resources('eventsCheck/index.php'));
+                } else {
+                    $_SESSION['errmessages'] = "Error in Your Sql Try Again";
+                }
+            }
+
+            $_SESSION['errmessages'] = $errorMessages;
         }
     }
 }
-
-
-
 //users
 $sqlusers = "select * from users";
 $opusers =  mysqli_query($con, $sqlusers);
@@ -170,7 +153,6 @@ $opusers =  mysqli_query($con, $sqlusers);
 $sqlevent = "select * from events_check where id =$id";
 $opevents =  mysqli_query($con, $sqlevent);
 $dataevent = mysqli_fetch_assoc($opevents);
-
 
 
 
@@ -197,6 +179,28 @@ $dataevent = mysqli_fetch_assoc($opevents);
     <h1 class="text-danger">Update Event data
         <small>Update Book by Admin! </small>
     </h1>
+
+    <ol class="breadcrumb bg-gradient bg-dark p-2 mx-auto mt-5 w-50 ">
+        <li class="breadcrumb-item"><a class="text-decoration-none text-danger" href="<?php echo resources('eventsCheck/index.php') ?>">Events Check</a></li>
+        <li class="breadcrumb-item active ">Edit Event checks</li>
+    </ol>
+
+    <h4 class="bg-gradient bg-dark p-2 mx-auto mt-5 w-50 text-danger">
+
+        <?php
+        if (isset($_SESSION['errmessages'])) {
+
+            foreach ($_SESSION['errmessages'] as $key =>  $data) {
+
+                echo '* ' . $key . ' : ' . $data . '<br>';
+            }
+
+            unset($_SESSION['errmessages']);
+        } else {
+            echo "Fill the inputs Please!";
+        }
+        ?>
+    </h4>
     <div class="d-flex flex-column flex-lg-row col-12 justify-content-evenly align-items-center">
         <form action="edit.php?id=<?php echo $dataevent['id']; ?>" method="POST" class=" col-lg-7 col-10  d-flex flex-column  p-4 ps-0 " enctype="multipart/form-data">
             <div class="col-sm-12 m-3 ">

@@ -61,8 +61,9 @@ function Validator($input, $flag, $length = 3)
 
         case 7:
             if (!file_exists($input)) {
-                unlink($input);
                 $status = false;
+            } else {
+                unlink($input);
             }
 
             break;

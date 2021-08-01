@@ -5,7 +5,7 @@ require '../../../layout/navAdmin.php';
 require '../../../checklogin/checkLoginadmin.php';
 
 
-$sql1 = "select e_reservation.* ,events.id as eventID, events.event_name as eventName ,users.name as eventenroller from e_reservation join events on e_reservation.event_id = events.id join users on users.id = e_reservation.enroller order by e_reservation.id ASC";
+$sql1 = "select e_reservation.* ,events.id as eventID, events.event_name as eventName ,users.name as eventenroller from e_reservation join events on e_reservation.event_id = events.id join users on users.id = e_reservation.enroller order by e_reservation.id desc";
 $op = mysqli_query($con, $sql1);
 
 

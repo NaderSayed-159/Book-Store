@@ -20,7 +20,7 @@ if (!Validator($id, 3)) {
 
     $_SESSION['message'] = $errorMessages;
 
-    header("Locattion: " . resources('books/index.php'));
+    header("Location: " . resources('books/index.php'));
 }
 
 

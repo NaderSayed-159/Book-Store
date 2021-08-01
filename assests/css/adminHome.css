@@ -1,0 +1,29 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.42em;
+    color: #A7A1AE;
+    background: url(../images/bg.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    perspective: 300px;
+}
+
+h1 {
+    font-size: 3em;
+    font-weight: 300;
+    line-height: 1em;
+    color: #4DC3FA;
+    font-weight: bold;
+    text-align: center;
+
+}
+
+.blue {
+    color: #185875;
+
+}
+
+.yellow {
+    color: #13653f;
+}

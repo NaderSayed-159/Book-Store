@@ -27,7 +27,7 @@
         <div class="logo">
             <nav class="navbar navbar-expand-lg navbar-light bg-dark bg-gradient ">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="#home">
+                    <a class="navbar-brand" href="<?php echo project('admin/index.php') ?>">
                         <img src="<?php echo images('logo.png'); ?>" alt="" width="70" height="50">
                     </a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon text-danger"></span>

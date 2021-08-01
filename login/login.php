@@ -62,11 +62,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 
             if ($data['user_type'] == 1) {
-                $_SESSION['data'] = $data;
-                header("Location: ".users('index.php'));
+                $_SESSION['users'] = $data;
+                header("Location: " . project('admin/index.php'));
             } else {
                 $_SESSION['users'] = $data;
-                header("Location: ". project('index.php'));
+                header("Location: " . project('index.php'));
             }
         } else {
 
@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="<?php echo css("login.css")?>">
+    <link rel="stylesheet" href="<?php echo css("login.css") ?>">
 
 
 </head>
@@ -126,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     </div>
 
-    <script src="<?php echo  js("login.js")?>"></script>
+    <script src="<?php echo  js("login.js") ?>"></script>
 </body>
 
 </html>

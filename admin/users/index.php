@@ -38,7 +38,7 @@ $op = mysqli_query($con, $sql);
 
 <body>
 
-    <h1 class="m-5"><span class="blue">&lt;</span>Users<span class="blue">&gt;</span> <span class="yellow">Data</pan>
+    <h1 class="m-5"><span class="blue">&lt;</span>Users<span class="blue">&gt;</span> <span class="yellow">Data</span>
     </h1>
     <h2>Admin Premission Only! <br><br>
         <?php if (isset($_SESSION['message'])) {

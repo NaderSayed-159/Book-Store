@@ -150,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         ?>
     </h4>
-    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" class="container mx-auto mt-5 d-flex flex-column  p-4 ps-0 ">
+    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" enctype="multipart/form-data" class="container mx-auto mt-5 d-flex flex-column  p-4 ps-0 ">
         <div class="col-sm-12 m-3 ">
             <div class=" form-floating">
                 <input type="text" class="form-control" id="floatingInput" placeholder="Enter Name" name="name">

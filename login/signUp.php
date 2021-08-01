@@ -1,23 +1,16 @@
 <?php
 
+require "../helpers/paths.php";
+require "../helpers/functions.php";
 require '../helpers/dbConnection.php';
-require '../helpers/paths.php';
 
 
-$sqlTypes = "select * from usersTypes where id >1";
+
+$sqlTypes = "select * from usersTypes where id > 1";
 $op2 =  mysqli_query($con, $sqlTypes);
 
 
 
-function cleanInputs($input)
-{
-
-    $input = trim($input);
-    $input = stripcslashes($input);
-    $input = htmlspecialchars($input);
-
-    return $input;
-}
 
 $errorMessages = [];
 
@@ -26,65 +19,71 @@ $errorMessages = [];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $name  = cleanInputs($_POST['name']);
+    $name  = cleanInputs(Sanitize($_POST['name'], 2));
     $email = cleanInputs($_POST['email']);
     $password = cleanInputs($_POST['password']);
     $phone = cleanInputs($_POST['phone']);
-    $gender = $_POST['gender'];
-    $usertype = $_POST['usertype'];
+    $gender = Sanitize($_POST['gender'], 1);
+    $usertype = Sanitize($_POST['usertype'], 2);
+
 
 
 
     //Name Validation
-    if (!empty($name)) {
-
-        if (strlen($name) < 3) {
-            $errorMessages['name'] = "Name Length must be > 2 ";
-        }
-    } else {
+    if (!Validator($name, 1)) {
         $errorMessages['name'] = "Required";
+    }
+
+    if (!Validator($name, 2)) {
+
+        $errorMessages['name'] = "Name Length must be more than 3 ";
     }
 
 
     //Email Validation
-    if (!empty($email)) {
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errorMessages['email'] = "Invalid Email";
-        }
-    } else {
+    if (!Validator($email, 1)) {
         $errorMessages['email'] = "Required";
     }
 
+    if (!Validator($email, 4)) {
+        $errorMessages['email'] = "Invalid Email";
+    }
 
 
     // Password Validation ... 
-    if (!empty($password)) {
-        // code ...   
-        if (strlen($password) < 6) {
-
-            $errorMessages['Password'] = "Password Length must be > 5 ";
-        }
-    } else {
+    if (!Validator($password, 2, 6)) {
 
         $errorMessages['Password'] = "Required";
     }
+
+
+    if (!Validator($password, 2, 6)) {
+
+        $errorMessages['Password'] = "Password Length must be more than 6 ";
+    }
+
+
+
+
     // phone Validation ... 
-    if (!empty($phone)) {
-        // code ...   
-        if (strlen($phone) < 11) {
-
-            $errorMessages['phone'] = "Phone should be 11 numbers";
-        }
-    } else {
-
+    if (!Validator($phone, 1)) {
         $errorMessages['phone'] = "Required";
     }
 
 
+    if (!Validator($phone, 2, 11)) {
+
+        $errorMessages['phone'] = "Phone should be 11 numbers";
+    }
 
 
-    if (count($errorMessages) == 0) {
 
+    if (count($errorMessages) > 0) {
+
+        $_SESSION['errmessages'] = $errorMessages;
+    } else {
+
+        // operations
         $password = sha1($password);
 
         $sql = "insert into users (name,email,password,phone,gender,user_type) values ('$name','$email','$password','$phone','$gender',$usertype)";
@@ -94,16 +93,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($op) {
             $_SESSION['message'] = "User Added";
-            header("Location: ".login('login.css'));
+            header("Location: " . login('login.php'));
         } else {
-            $errorMessages['sqlOperation'] = "Try Again";
+            $errorMessages['sqlOperation'] = "Error in Your Sql Try Again";
         }
-    } else {
 
-        foreach ($errorMessages as $key => $value) {
-
-            echo '* ' . $key . ' : ' . $value . '<br>';
-        }
+        $_SESSION['errmessages'] = $errorMessages;
     }
 }
 
@@ -132,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="<?php css('signup.css')?>">
+    <link rel="stylesheet" href="<?php echo css('signup.css') ?>">
     <style>
 
     </style>
@@ -178,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
     </div>
 
-    <script src="<?php js('login.js')?>"></script>
+    <script src="<?php js('login.js') ?>"></script>
 </body>
 
 </html>

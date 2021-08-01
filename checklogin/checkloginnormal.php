@@ -1,9 +1,9 @@
 
 <?php
 ob_start();
-if (!isset($_SESSION['data'])) {
+if (!isset($_SESSION['users'])) {
 
-    header("Location: login.php");
+    header("Location: " . login('login.php'));
 }
 
 

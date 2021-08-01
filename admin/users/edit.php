@@ -147,7 +147,7 @@ $op2 =  mysqli_query($con, $sqlTypes);
             }
             ?>
         </h4>
-        <form action="edit.php?id=<?php echo $data['id']; ?>" method="POST" class="container mx-auto mt-5 d-flex flex-column  p-4 ps-0 ">
+        <form action="edit.php?id=<?php echo $data['id']; ?>" method="POST" class="container mx-auto mt-5 d-flex flex-column  p-4 ps-0 " enctype="multipart/form-data">
             <div class="col-sm-12 m-3 ">
                 <div class=" form-floating">
                     <input type="text" class="form-control" id="floatingInput" placeholder="Enter Name" name="name" value="<?php echo $data['name']; ?>">

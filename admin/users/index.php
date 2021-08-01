@@ -1,5 +1,5 @@
 <?php
-
+ob_start();
 require "../../helpers/paths.php";
 require '../../helpers/dbConnection.php';
 require '../../layout/navAdmin.php';

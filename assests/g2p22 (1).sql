@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 24, 2021 at 02:26 AM
--- Server version: 10.4.19-MariaDB
--- PHP Version: 8.0.7
+-- Generation Time: Aug 02, 2021 at 04:39 AM
+-- Server version: 10.4.20-MariaDB
+-- PHP Version: 8.0.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -42,9 +42,11 @@ CREATE TABLE `books` (
 --
 
 INSERT INTO `books` (`id`, `book_name`, `book_category`, `describtion`, `Download`, `coverPic`, `book_adder`) VALUES
-(1, ' petroleum geophysics', 2, 'we are going to  discuss the petroleum industry', 'https://codepen.io/search/', '  6409806951626994342.jpg', 1),
-(112, ' petroleum geophysic', 2, 'we are going to  discuss the petroleum industry', 'https://codepen.io/search/', '   17497390301626994353.jpg', 1),
-(113, 'after earth', 2, 'zombies after earth', 'https://codepen.io/search/', '18066700341626994504.jpg', 26);
+(134, ' oil exploration', 1, 'the greatest of all time', 'https://github.com/NaderSayed-159/NTI-Project/tree/b8c2faa5b45acd2c4bf306c322618e65490d8540', ' 9508921921627763778.jpg', 1),
+(136, 'Structure Geology', 2, 'the greatest of all time', 'https://github.com/NaderSayed-159/NTI-Project/tree/b8c2faa5b45acd2c4bf306c322618e65490d8540', ' 9508931921627763778.jpg', 1),
+(137, 'Petroluem Geology', 2, 'the greatest of all time and all deimensions', 'https://github.com/NaderSayed-159/NTI-Project/tree/b8c2faa5b45acd2c4bf306c322618e65490d8540', ' 15419543301627764580.jpg', 1),
+(138, ' oil exploration', 1, 'the greatest of all time', 'https://github.com/NaderSayed-159/NTI-Project/tree/b8c2faa5b45acd2c4bf306c322618e65490d8540', ' 9508921921627763758.jpg', 1),
+(139, 'Up in the pines', 1, 'travel to another side of this world', 'https://github.com/NaderSayed-159/NTI-Project/tree/b8c2faa5b45acd2c4bf306c322618e65490d8540', ' 9508921921627763774.jpg', 1);
 
 -- --------------------------------------------------------
 
@@ -68,6 +70,48 @@ INSERT INTO `bookscategory` (`id`, `book_category`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `book_rels`
+--
+
+CREATE TABLE `book_rels` (
+  `id` int(11) NOT NULL,
+  `book_name` int(11) DEFAULT NULL,
+  `rels_ad` char(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `book_rels`
+--
+
+INSERT INTO `book_rels` (`id`, `book_name`, `rels_ad`) VALUES
+(1, 139, 'rel1.png');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contact`
+--
+
+CREATE TABLE `contact` (
+  `id` int(11) NOT NULL,
+  `name` char(100) NOT NULL,
+  `email` char(100) NOT NULL,
+  `phone` char(100) NOT NULL,
+  `subj` char(100) NOT NULL,
+  `msg` varchar(400) NOT NULL,
+  `sender_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `contact`
+--
+
+INSERT INTO `contact` (`id`, `name`, `email`, `phone`, `subj`, `msg`, `sender_id`) VALUES
+(1, 'nadersayed003', 'nadersayed001@gmail.com', '01099412446', 'wanna be ac', 'hello ther r u alivesss', 67);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `events`
 --
 
@@ -85,10 +129,8 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`id`, `event_name`, `event_describtion`, `eventDate`, `event_logo`, `event_submiter`) VALUES
-(27, ' petroleum geophysi', 'we are going to  discuss the petroleum industry', '2021-07-30 19:00:00', '3933706501627063142.jpg', 1),
-(28, 'petroleum geophysics', 'we are going to  discuss the petroleum industry', '2021-07-24 17:55:00', '19185492421627062957.jpg', 1),
-(29, 'petroleum geophysics', 'we are going to  discuss the petroleum industry', '2021-07-23 21:06:37', '19185492421627062957.jpg', 58),
-(30, 'petroleum geophysics', 'we are going to  discuss the petroleum industry', '2021-07-24 17:55:00', '19185492421627062957.jpg', 1);
+(35, ' oil exploration', 'the greatest of all time', '2021-08-01 21:50:00', '5166207391627775517.jpg', 1),
+(36, 'oil exploration', 'the greatest of all time', '2021-08-08 23:31:00', '5362982511627775832.png', 1);
 
 -- --------------------------------------------------------
 
@@ -110,7 +152,9 @@ CREATE TABLE `events_check` (
 --
 
 INSERT INTO `events_check` (`id`, `event_name`, `event_desc`, `e_date`, `event_submiter`, `e_logo`) VALUES
-(4, 'petroleum geophysics', 'we are going to  discuss the petroleum industry', '2021-07-31 21:22:00', 1, '20405789651627064635.jpg');
+(4, 'petroleum geophysics', 'we are going to  discuss the petroleum industry', '2021-07-31 23:22:28', 1, '12287699871627774839.jpg'),
+(5, 'oil exploration', 'the greatest of all time', '2021-08-23 23:09:00', 1, '3303064651627773944.png'),
+(13, 'oil exploration', 'the greatest of all time', '2021-09-01 02:11:00', 67, '5277057841627870323.png');
 
 -- --------------------------------------------------------
 
@@ -129,9 +173,7 @@ CREATE TABLE `e_reservation` (
 --
 
 INSERT INTO `e_reservation` (`id`, `event_id`, `enroller`) VALUES
-(1, 27, 58),
-(2, 29, 26),
-(3, 28, 26);
+(6, 35, 60);
 
 -- --------------------------------------------------------
 
@@ -141,11 +183,22 @@ INSERT INTO `e_reservation` (`id`, `event_id`, `enroller`) VALUES
 
 CREATE TABLE `news` (
   `id` int(11) NOT NULL,
-  `title` int(11) NOT NULL,
-  `content` int(11) NOT NULL,
-  `image` int(11) NOT NULL,
+  `title` char(100) NOT NULL,
+  `content` varchar(300) NOT NULL,
+  `image` char(200) NOT NULL,
   `adder` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `news`
+--
+
+INSERT INTO `news` (`id`, `title`, `content`, `image`, `adder`) VALUES
+(1, 'el almein Feild', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque sunt eius animi omnis praesentium! Vel illo, aperiam, nam culpa iusto perspiciatis laborum qui, error iste minima recusandae nostrum ipsa unde id maiores modi tempora vitae laudantium libero. Itaque beat', 'https://lh3.googleusercontent.com/proxy/hJTfz1_gEhuzDqjzb24KBJ64PZPw-i3iswioNciZYqC0El2Iey3nzuzkLogWyZQpdB9mq5zPCLZCZcDs_bUUbODpZ8K1WvUfUNY5eWm9uycW4al8xjgsvTeKkVw', 1),
+(2, 'Zohr Feild', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque sunt eius animi omnis praesentium! Vel illo, aperiam, nam culpa iusto perspiciatis laborum qui, error iste minima recusandae nostrum ipsa unde id maiores modi tempora vitae laudantium libero. Itaque beat', 'https://plsadaptive.s3.amazonaws.com/eco/images/channel_content/images/rig_3.jpg', 1),
+(3, 'Ras-Ghareb Field', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque sunt eius animi omnis praesentium! Vel illo, aperiam, nam culpa iusto perspiciatis laborum qui, error iste minima recusandae nostrum ipsa unde id maiores modi tempora vitae laudantium libero. Itaque beat', 'https://evac.com/wp-content/uploads/2019/06/drilling-and-jack-up-rigs.jpg', 1),
+(4, 'Morgan Field', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque sunt eius animi omnis praesentium! Vel illo, aperiam, nam culpa iusto perspiciatis laborum qui, error iste minima recusandae nostrum ipsa unde id maiores modi tempora vitae laudantium libero. Itaque beat', 'https://www.nsenergybusiness.com/wp-content/uploads/sites/3/2019/11/Gloria-Jack-up-Rig.jpg', 1),
+(5, 'El-Nor Feild', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque sunt eius animi omnis praesentium! Vel illo, aperiam, nam culpa iusto perspiciatis laborum qui, error iste minima recusandae nostrum ipsa unde id maiores modi tempora vitae laudantium libero. Itaque beat', 'https://www.bearing-news.com/wp-content/uploads/2020/08/rkb03082020web1.jpeg', 1);
 
 -- --------------------------------------------------------
 
@@ -237,7 +290,7 @@ CREATE TABLE `users` (
   `name` char(50) NOT NULL,
   `email` char(80) NOT NULL,
   `password` char(50) NOT NULL,
-  `phone` int(11) NOT NULL,
+  `phone` char(11) NOT NULL,
   `gender` char(40) NOT NULL,
   `user_type` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -247,15 +300,16 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `phone`, `gender`, `user_type`) VALUES
-(1, 'Nader bauomi', 'nadersayed001@gmail.com', '2bc92bfef16f612ffac1dbefcb4aab47b0016062', 1099412326, 'male', 1),
-(26, 'rehab bauom', 'rehabsayed001@gmail.com', 'd135b5130cd6b446693ecb1cfe81e3721f66079f', 1283165508, 'female', 2),
-(55, 'nadersayed0', 'nadersay@gmail.com', 'beed8d5dbfe66bc625d3b733abff0036dcd4a7f9', 1099411326, 'female', 3),
-(56, 'rawan khouder', 'rkhouder@gmail.com', 'dd108f601142a1e57f402a97fa9ae8dbef8af333', 1112365466, 'female', 1),
-(58, 'rawan nasser', 'rawan@gmail.com', '316e876288a1ade387b62cee77e68f30c5a51a46', 1016139685, 'female', 2),
-(59, 'nader', 'nader@gmail.com', '123456789', 1113279567, 'male', 3),
-(60, 'naders', 'delking90@gmail.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', 1113275667, 'male', 3),
-(61, 'nader', 'nase@gmail.com', '2bc92bfef16f612ffac1dbefcb4aab47b0016062', 1113269576, 'male', 3),
-(62, 'root', 'root@admin.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', 1111111111, 'male', 1);
+(1, 'Nader bauomi', 'nadersayed001@gmail.com', '2bc92bfef16f612ffac1dbefcb4aab47b0016062', '01099412326', 'male', 1),
+(26, 'rehab bauom', 'rehabsayed001@gmail.com', 'd135b5130cd6b446693ecb1cfe81e3721f66079f', '1283165508', 'female', 2),
+(55, 'nadersayed0', 'nadersay@gmail.com', 'beed8d5dbfe66bc625d3b733abff0036dcd4a7f9', '01099411326', 'female', 3),
+(59, 'nader', 'nader@gmail.com', '123456789', '1113279567', 'male', 3),
+(60, 'naders', 'delking90@gmail.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', '1113275667', 'male', 3),
+(61, 'nader', 'nase@gmail.com', '2bc92bfef16f612ffac1dbefcb4aab47b0016062', '1113269576', 'male', 3),
+(62, 'root', 'root@admin.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', '1111111111', 'male', 1),
+(64, 'rorosayed', 'rorosayed@gmail.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', '01099412446', 'female', 2),
+(65, 'abdo mohamed', 'am@gmail.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', '01088812446', '', 3),
+(67, 'nadersayed003', 'delking99@gmail.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', '01099411325', '', 2);
 
 -- --------------------------------------------------------
 
@@ -289,6 +343,13 @@ CREATE TABLE `users_media` (
   `CV` char(100) NOT NULL,
   `user_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `users_media`
+--
+
+INSERT INTO `users_media` (`id`, `profile_pic`, `CV`, `user_id`) VALUES
+(1, ' 5836536301627847764.png', '', 67);
 
 -- --------------------------------------------------------
 
@@ -332,6 +393,20 @@ ALTER TABLE `books`
 --
 ALTER TABLE `bookscategory`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `book_rels`
+--
+ALTER TABLE `book_rels`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `book_name` (`book_name`);
+
+--
+-- Indexes for table `contact`
+--
+ALTER TABLE `contact`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sender_id` (`sender_id`);
 
 --
 -- Indexes for table `events`
@@ -427,6 +502,7 @@ ALTER TABLE `userstypes`
 -- Indexes for table `users_media`
 --
 ALTER TABLE `users_media`
+  ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
 
 --
@@ -451,7 +527,7 @@ ALTER TABLE `video_category`
 -- AUTO_INCREMENT for table `books`
 --
 ALTER TABLE `books`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=140;
 
 --
 -- AUTO_INCREMENT for table `bookscategory`
@@ -460,28 +536,40 @@ ALTER TABLE `bookscategory`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `book_rels`
+--
+ALTER TABLE `book_rels`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `contact`
+--
+ALTER TABLE `contact`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `events_check`
 --
 ALTER TABLE `events_check`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `e_reservation`
 --
 ALTER TABLE `e_reservation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `news`
 --
 ALTER TABLE `news`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `payments_methods`
@@ -523,13 +611,19 @@ ALTER TABLE `q_answers`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT for table `userstypes`
 --
 ALTER TABLE `userstypes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `users_media`
+--
+ALTER TABLE `users_media`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `videos`
@@ -553,6 +647,12 @@ ALTER TABLE `video_category`
 ALTER TABLE `books`
   ADD CONSTRAINT `book adder` FOREIGN KEY (`book_adder`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `book category` FOREIGN KEY (`book_category`) REFERENCES `bookscategory` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `book_rels`
+--
+ALTER TABLE `book_rels`
+  ADD CONSTRAINT `book release` FOREIGN KEY (`book_name`) REFERENCES `books` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `events`

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 02, 2021 at 04:39 AM
+-- Generation Time: Aug 02, 2021 at 09:34 PM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 8.0.8
 
@@ -129,7 +129,7 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`id`, `event_name`, `event_describtion`, `eventDate`, `event_logo`, `event_submiter`) VALUES
-(35, ' oil exploration', 'the greatest of all time', '2021-08-01 21:50:00', '5166207391627775517.jpg', 1),
+(35, 'petroluem upcomin', 'study of petrophyics', '2021-08-02 10:54:14', '5166207391627775517.jpg', 1),
 (36, 'oil exploration', 'the greatest of all time', '2021-08-08 23:31:00', '5362982511627775832.png', 1);
 
 -- --------------------------------------------------------
@@ -173,7 +173,8 @@ CREATE TABLE `e_reservation` (
 --
 
 INSERT INTO `e_reservation` (`id`, `event_id`, `enroller`) VALUES
-(6, 35, 60);
+(6, 35, 60),
+(7, 35, 67);
 
 -- --------------------------------------------------------
 
@@ -329,6 +330,7 @@ CREATE TABLE `userstypes` (
 INSERT INTO `userstypes` (`id`, `user_type`) VALUES
 (1, 'Admin'),
 (2, 'Company'),
+(4, 'Job Creator'),
 (3, 'Standard');
 
 -- --------------------------------------------------------
@@ -563,7 +565,7 @@ ALTER TABLE `events_check`
 -- AUTO_INCREMENT for table `e_reservation`
 --
 ALTER TABLE `e_reservation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `news`
@@ -617,7 +619,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `userstypes`
 --
 ALTER TABLE `userstypes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users_media`

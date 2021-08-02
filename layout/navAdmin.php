@@ -37,8 +37,24 @@
                             <li class="nav-item dropdown ">
                                 <a class="nav-link dropdown-toggle text-warning fw-bold" href="#" id="navbarDropdown" data-bs-toggle="dropdown">Users</a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="<?php echo users('index.php') ?>">Show Users </a></li>
-                                    <li><a class="dropdown-item" href="<?php echo users('create.php') ?>">Appand New</a></li>
+                                    <li>
+                                        <a class="dropdown-item" href="<?php echo users('index.php') ?>">Show Users </a>
+                                        <ul class="list-unstyled ps-3">
+                                            <li><a class="dropdown-item" href="<?php echo users('create.php') ?>">Appand New</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="<?php echo project('admin/usersCategory/index.php') ?>">Users Categories </a>
+                                        <ul class="list-unstyled ps-3">
+                                            <li><a class="dropdown-item" href="<?php echo project('admin/usersCategory/create.php') ?>">Appand New</a></li>
+                                        </ul>
+                                    </li>
+
+
+
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
@@ -46,7 +62,14 @@
                                     Resources
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="<?php echo resources('books/index.php') ?>">Books </a></li>
+                                    <li><a class="dropdown-item" href="<?php echo resources('books/index.php') ?>">Books </a>
+                                        <ul class="list-unstyled ps-3">
+                                            <li><a class="dropdown-item " href="<?php echo resources('booksCategory/index.php') ?>">Book Categroies</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
                                     <li><a class="dropdown-item" href="#">News</a></li>
                                     <li><a class="dropdown-item" href="#">Posts</a></li>
                                     <li>
@@ -56,6 +79,9 @@
                                         <ul class="list-unstyled ps-3">
                                             <li><a class="dropdown-item " href="#">Question Replays</a></li>
                                         </ul>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
                                     </li>
                                     <li><a class="dropdown-item" href="<?php echo resources('events/index.php') ?>">Events</a>
                                         <ul class="list-unstyled ps-3">
@@ -69,12 +95,17 @@
                         </li>
 
                         </ul>
-                        <form class="d-flex ">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+
+
+                        <marquee behavior="" direction=""><span class="mx-auto text-danger fw-bold fs-5">Live USER : <?php echo $_SESSION['users']["name"]; ?></span></marquee>
+
+                        <form class="d-flex col-3 ">
+                            <input class="form-control me-2 " type="search" placeholder="Search" aria-label="Search">
                             <button class="btn btn-danger text-white" type="submit">Search</button>
                         </form>
-                        <a href="<?php echo login('logout.php') ?>" class="btn btn-danger text-white mx-2" type="submit">Log Out</a>
+                        <a href="<?php echo login('logout.php') ?>" class="btn btn-danger text-white mx-2 col-1" type="submit">Log Out</a>
                     </div>
+
                 </div>
             </nav>
 

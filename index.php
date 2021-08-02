@@ -3,8 +3,8 @@
 require 'helpers/dbConnection.php';
 require "helpers/paths.php";
 require "helpers/functions.php";
-require "layout/header.php";
 require "./checklogin/checkloginnormal.php";
+require "layout/header.php";
 
 
 $mysqlnews = 'SELECT * FROM `news` ORDER BY id DESC LIMIT 3';

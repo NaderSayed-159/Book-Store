@@ -6,7 +6,7 @@ require '../helpers/dbConnection.php';
 
 
 
-$sqlTypes = "select * from usersTypes where id > 1";
+$sqlTypes = "select * from usersTypes where id > 2";
 $op2 =  mysqli_query($con, $sqlTypes);
 
 

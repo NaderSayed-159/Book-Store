@@ -48,7 +48,7 @@ $op = mysqli_query($con, $sql1);
     </h2>
 
 
-    <a href="create.php" title="Avaliable only for Company Users to add Events to checked" class="btn btn-secondary add">Add New +</a>
+    <a href="create.php" title="Avaliable only for Company Users to add Events to checked" class="btn btn-secondary add" style="pointer-events: none;">Add New +</a>
 
 
     <table class="container ">

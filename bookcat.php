@@ -12,7 +12,7 @@ $cat = $_GET['cat'];
 
 $cat  = Sanitize($_GET['cat'], 1);
 
-
+$_SESSION['cat'] = $cat;
 
 $sqlbkCat = 'select * from bookscategory';
 $opbkcat = mysqli_query($con, $sqlbkCat);
@@ -21,10 +21,10 @@ $sqlbooks = 'select books.* ,bookscategory.id as catId, bookscategory.book_categ
 $opbooks = mysqli_query($con, $sqlbooks);
 
 
-$sqlbklast = 'select * from books order by id desc';
+$sqlbklast = 'select * from book_rels order by id desc limit 1';
 $opbklast = mysqli_query($con, $sqlbklast);
-
-
+$databklast = mysqli_fetch_assoc($opbklast);
+$_SESSION['bklast'] = $databklast;
 
 
 ?>
@@ -44,7 +44,7 @@ $opbklast = mysqli_query($con, $sqlbklast);
 <body>
     <div class="col-9 mx-auto mt-3">
         <div class="card mb-3 ">
-            <img src="<?php echo $_SESSION['bookAd']['adimg'] ?>" class="card-img-top" alt="ads" style="height: 350px;">
+            <img src="<?php echo images('bookRel/') . $_SESSION['bklast']['rels_ad']; ?>" class="card-img-top" alt="ads" style="height: 350px;">
             <div class="card-body">
                 <h6>Latest Books</h6>
                 <h5 class="card-title text-uppercase fw-bold"><?php echo $_SESSION['bookAd']['bookName'] ?></h5>
@@ -61,9 +61,13 @@ $opbklast = mysqli_query($con, $sqlbklast);
 
             <h3 class="">Categories</h3>
             <ul class="list-unstyled ms-3" style=" min-height: 300px">
-                <a class="btn btn-warning" href="<?php echo project('books.php'); ?>">Clear Filter</a>
+                <a class="btn btn-warning m-3" href="<?php echo project('books.php'); ?>">Clear Filter</a>
                 <?php while ($databkcat = mysqli_fetch_assoc($opbkcat)) { ?>
-                    <li><a href="<?php echo project('bookcat.php') . '?cat=' . $databkcat['id']; ?>" class="text-decoration-none text-white">-> <?php echo $databkcat['book_category'] ?></a></li>
+                    <li><a href="<?php echo project('bookcat.php') . '?cat=' . $databkcat['id']; ?>" class="text-decoration-none  <?php if ($databkcat['id'] == $_SESSION['cat']) {
+                                                                                                                                        echo 'text-danger';
+                                                                                                                                    } else {
+                                                                                                                                        echo 'text-white';
+                                                                                                                                    } ?>">-> <?php echo $databkcat['book_category'] ?></a></li>
                 <?php } ?>
             </ul>
         </aside>

@@ -58,7 +58,7 @@ $_SESSION['profilePic'] = $data;
                             <?php if (isset($_SESSION['users']) && $_SESSION['users']['user_type'] == 2) { ?>
 
                                                    <li class=' nav-item'>
-                                    <a class='nav-link text-dark fw-bold btn btn-primary me-2 <?php if (str_ends_with($_SERVER['PHP_SELF'], 'events.php')) {
+                                    <a class='nav-link text-dark fw-bold btn btn-primary me-2 <?php if (str_ends_with($_SERVER['PHP_SELF'], 'eventSubmit.php')) {
                                                                                                     echo 'active';
                                                                                                 } ?>' href='<?php echo project('eventSubmit.php') ?>''>Submit Evnets</a>
                             </li>

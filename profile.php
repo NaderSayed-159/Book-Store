@@ -74,6 +74,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+if (isset($_SESSION['users'])) {
+
+    $usertype = $_SESSION['users']['user_type'];
+
+    if ($usertype == 2) {
+        $_SESSION['usertype'] = 'Company';
+    } else {
+        $_SESSION['usertype'] = 'standard';
+    }
+}
 
 ?>
 
@@ -126,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                             <div class="name">
                                 <h3 class="title"><?php echo $_SESSION['users']['name'] ?></h3>
-                                <!-- <h6>Designer</h6> -->
+                                <h6><?php echo $_SESSION['usertype']; ?></h6>
                                 <a href="#pablo" class="btn btn-just-icon btn-link btn-dribbble"><i class="fa fa-dribbble"></i></a>
                                 <a href="#pablo" class="btn btn-just-icon btn-link btn-twitter"><i class="fa fa-twitter"></i></a>
                                 <a href="#pablo" class="btn btn-just-icon btn-link btn-pinterest"><i class="fa fa-pinterest"></i></a>

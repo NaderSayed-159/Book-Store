@@ -31,7 +31,7 @@ $_SESSION['profilePic'] = $data;
         <div class="logo">
             <nav class="navbar navbar-expand-lg navbar-light bg-primary bg-gradient">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="#home">
+                    <a class="navbar-brand" href="<?php echo project('index.php') ?>">
                         <img src="<?php echo images('logo.png'); ?>" alt="" width="70" height="50" class="bg-dark rounded-pill">
                     </a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon text-danger"></span>
@@ -48,11 +48,21 @@ $_SESSION['profilePic'] = $data;
                                                                                                 echo "active";
                                                                                             } ?>" href="<?php echo project('books.php') ?>">Books</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark fw-bold btn btn-primary me-2 <?php if (str_ends_with($_SERVER['PHP_SELF'], 'events.php')) {
-                                                                                                echo "active";
-                                                                                            } ?>" href="<?php echo project('events.php') ?>">Evnets</a>
+                            <li class='nav-item'>
+                                <a class='nav-link text-dark fw-bold btn btn-primary me-2 <?php if (str_ends_with($_SERVER['PHP_SELF'], 'events.php')) {
+                                                                                                echo 'active';
+                                                                                            } ?>' href='<?php echo project('events.php') ?>''>Evnets</a>
                             </li>
+
+
+                            <?php if (isset($_SESSION['users']) && $_SESSION['users']['user_type'] == 2) { ?>
+
+                                                   <li class=' nav-item'>
+                                    <a class='nav-link text-dark fw-bold btn btn-primary me-2 <?php if (str_ends_with($_SERVER['PHP_SELF'], 'events.php')) {
+                                                                                                    echo 'active';
+                                                                                                } ?>' href='<?php echo project('eventSubmit.php') ?>''>Submit Evnets</a>
+                            </li>
+                          <?php  } ?>
 
                         </ul>
                         <form class="d-flex">

@@ -11,10 +11,9 @@ $mysqlnews = 'SELECT * FROM `news` ORDER BY id DESC LIMIT 3';
 $opNews = mysqli_query($con, $mysqlnews);
 
 
-$mysqlbkAd = 'SELECT book_rels.rels_ad as adimg , books.book_name as bookName ,books.describtion as  bookDesc FROM book_rels JOIN books on book_rels.book_name = books.id ';
+$mysqlbkAd = 'SELECT book_rels.rels_ad as adimg , books.book_name as bookName ,books.Download as download,books.describtion  as  bookDesc FROM book_rels JOIN books on book_rels.book_name = books.id ';
 $opbkAd = mysqli_query($con, $mysqlbkAd);
 $databkAd = mysqli_fetch_assoc($opbkAd);
-
 $_SESSION['bookAd'] = $databkAd;
 
 
@@ -22,6 +21,101 @@ $sqlevent = "select * from events order by id desc limit 1 ";
 $opevents =  mysqli_query($con, $sqlevent);
 $dataevent = mysqli_fetch_assoc($opevents);
 $_SESSION['event'] = $dataevent;
+
+
+
+
+$errorMessages = [];
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    $name  = cleanInputs(Sanitize($_POST['name'], 2));
+    $email = cleanInputs($_POST['email']);
+    $phone = cleanInputs($_POST['phone']);
+    $subj = cleanInputs($_POST['subj']);
+    $msg = cleanInputs($_POST['msg']);
+    $sender = $_SESSION['users']['id'];
+
+
+
+
+    //Name Validation
+    if (!Validator($name, 1)) {
+        $errorMessages['name'] = "Required";
+    }
+
+    if (!Validator($name, 2)) {
+
+        $errorMessages['name'] = "Name Length must be more than 3 ";
+    }
+
+
+    //Email Validation
+    if (!Validator($email, 1)) {
+        $errorMessages['email'] = "Required";
+    }
+
+    if (!Validator($email, 4)) {
+        $errorMessages['email'] = "Invalid Email";
+    }
+
+    // phone Validation ... 
+
+    if (!Validator($phone, 1)) {
+        $errorMessages['phone'] = "Required";
+    }
+
+
+    if (!Validator($phone, 2, 11)) {
+
+        $errorMessages['phone'] = "Phone should be 11 numbers";
+    }
+
+
+
+    if (!Validator($subj, 1)) {
+        $errorMessages['subject'] = "Required";
+    }
+
+    if (!Validator($subj, 2, 5)) {
+
+        $errorMessages['subject'] = "subject Length must be more than 5";
+    }
+
+    if (!Validator($msg, 1)) {
+        $errorMessages['message'] = "Required";
+    }
+
+    if (!Validator($subj, 2, 10)) {
+
+        $errorMessages['message'] = "message Length must be more than 10 ";
+    }
+
+
+
+    if (count($errorMessages) > 0) {
+
+        $_SESSION['errmessages'] = $errorMessages;
+    } else {
+
+        // operations
+        $password = sha1($password);
+
+        $sql = "insert into contact (name,email,phone,subj,msg,sender_id) values ('$name','$email','$phone','$subj','$msg',$sender)";
+        $op =  mysqli_query($con, $sql);
+
+
+
+        if ($op) {
+            $_SESSION['message'] = "Sent ^^";
+            header("Location: " . project('index.php'));
+        } else {
+            $errorMessages['sqlOperation'] = "Error in Your Sql Try Again";
+        }
+
+        $_SESSION['errmessages'] = $errorMessages;
+    }
+}
+
 ?>
 
 
@@ -71,12 +165,12 @@ $_SESSION['event'] = $dataevent;
             <div class="d-flex col-12 justify-content-evenly">
                 <div class="col-8">
                     <div class="card mb-3 ">
-                        <img src="<?php echo $_SESSION['bookAd']['adimg'] ?>" class="card-img-top" alt="ads" style="height: 350px;">
+                        <img src="<?php echo images('bookRel/') . $_SESSION['bookAd']['adimg']; ?>" class="card-img-top" alt="ads" style="height: 350px;">
                         <div class="card-body">
                             <h6>Latest Books</h6>
                             <h5 class="card-title text-uppercase fw-bold"><?php echo $_SESSION['bookAd']['bookName'] ?></h5>
                             <p class="card-text">Book Describtion: <?php echo $_SESSION['bookAd']['bookDesc'] ?>.</p>
-                            <p class="card-text"><a href="" class="text-decoration-none"><small class="text-muted">See more...</small></a></p>
+                            <p class="card-text"><a href="<?php echo project('books.php') ?>" class="text-decoration-none"><small class="text-muted">See more...</small></a></p>
                         </div>
                     </div>
                 </div>
@@ -100,32 +194,52 @@ $_SESSION['event'] = $dataevent;
 
     <div class="shade">
         <h1 class="text-danger text-center m-5">Join Us as Activity user</h1>
+        <p class="text-danger text-center m-3">You can join as activity user to get its benefits just contact us by this form </p>
+        <p class="text-danger text-center m-3">contact us if u face a problem</p>
+        <p class="text-warning text-center m-3">
+            <?php
+            if (isset($_SESSION['errmessages'])) {
+
+                foreach ($_SESSION['errmessages'] as $key =>  $data) {
+
+                    echo '* ' . $key . ' : ' . $data . '<br>';
+                }
+
+                unset($_SESSION['errmessages']);
+            } else if (isset($_SESSION['message'])) {
+
+                echo $_SESSION['message'];
+
+                unset($_SESSION['message']);
+            }
+            ?>
+        </p>
         <div class="blackboard">
-            <div class="form">
+            <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" class="form" enctype="multipart/form-data">
                 <p>
                     <label>Name: </label>
-                    <input type="text" />
+                    <input type="text" name="name" />
                 </p>
                 <p>
                     <label>Email: </label>
-                    <input type="text" />
+                    <input type="text" name="email" />
                 </p>
                 <p>
                     <label>Phone: </label>
-                    <input type="tel" />
+                    <input type="text" name="phone" />
                 </p>
                 <p>
                     <label>Subject: </label>
-                    <input type="text" />
+                    <input type="text" name="subj" />
                 </p>
                 <p>
                     <label>Message: </label>
-                    <textarea></textarea>
+                    <textarea name="msg"></textarea>
                 </p>
                 <p class="wipeout">
                     <input type="submit" value="Send" />
                 </p>
-            </div>
+            </form>
         </div>
     </div>
 

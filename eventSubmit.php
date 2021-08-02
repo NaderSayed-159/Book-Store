@@ -1,17 +1,14 @@
 <?php
 ob_start();
-require "../../../helpers/paths.php";
-require "../../../helpers/functions.php";
-require '../../../helpers/dbConnection.php';
-require '../../../checklogin/checkLoginadmin.php';
-require '../../../layout/navAdmin.php';
+require "helpers/paths.php";
+require "helpers/functions.php";
+require 'helpers/dbConnection.php';
+require 'checklogin/checkloginnormal.php';
+require 'layout/header.php';
 
 
 
 //users
-$sqlusers = "select * from users";
-$opusers =  mysqli_query($con, $sqlusers);
-
 
 
 $errorMessages = [];
@@ -23,8 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $name  = cleanInputs(Sanitize($_POST['name'], 2));
     $describtion = cleanInputs($_POST['describtion']);
-    $adder = Sanitize($_POST['submiter'], 1);
     $edate = strtotime($_POST["Edate"]);
+    $adder = $_SESSION['users']['id'];
 
 
 
@@ -91,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         $tmp_path = $_FILES['logo']['tmp_name'];
         $LogoName = rand() . time() . '.' . $fileExtension;
-        $disFolder = '../../../assests/images/eventsCheckLogos/';
+        $disFolder = 'assests/images/eventsCheckLogos/';
         $disPath  = $disFolder . $LogoName;
 
         if (move_uploaded_file($tmp_path, $disPath)) {
@@ -105,8 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
             if ($ops) {
-                $_SESSION['message'] = "Data Inserted";
-                header("Location: " . resources('eventsCheck/index.php'));
+                $_SESSION['message'] = "Event Details Sent";
+                header("Location: " . project("eventSubmit.php"));
             } else {
                 $_SESSION['errmessages'] = "Error in Your Sql Try Again";
             }
@@ -144,12 +141,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body class="col-12">
 
     <h1 class="text-danger">Add a new Event to Database
-        <small>Create a new Event </small>
+        <small>Submit a new Event </small>
     </h1>
-    <ol class="breadcrumb bg-gradient bg-dark p-2 mx-auto mt-5 w-50 ">
-        <li class="breadcrumb-item"><a class="text-decoration-none text-danger" href="<?php echo resources('eventsCheck/index.php') ?>">Events Check</a></li>
-        <li class="breadcrumb-item active ">Add Event Check</li>
-    </ol>
 
     <h4 class="bg-gradient bg-dark p-2 mx-auto mt-5 w-50 text-danger">
         <?php
@@ -161,9 +154,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             unset($_SESSION['errmessages']);
+        } else if (isset($_SESSION['message'])) {
+
+            echo $_SESSION['message'];
+
+            unset($_SESSION['message']);
         } else {
             echo "Fill the inputs Please!";
         }
+
+
+
+
         ?>
     </h4>
     <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" class="container col-8 mx-auto mt-5 d-flex flex-column  p-4 ps-0 " enctype="multipart/form-data">
@@ -194,20 +196,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <label for="floatingInput">uploade Event Logo</label>
             <input type="file" name="logo" id="floatingInput" class="form-control">
         </div>
-
-
-        <div class="col-sm-7 m-3 mx-auto">
-            <div class=" form-control p-2  ">
-                <label for="adder" class="p-2">Event Submiter </label>
-                <select id="adder" class="form-select" name="submiter">
-                    <?php while ($datauser = mysqli_fetch_assoc($opusers)) {
-                    ?>
-                        <option value="<?php echo $datauser['id']; ?>"><?php echo $datauser['name']; ?></option>
-                    <?php } ?>
-                </select>
-            </div>
-        </div>
-
 
 
 

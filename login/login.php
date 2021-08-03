@@ -70,15 +70,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             }
         } else {
 
-            echo 'Error in Login try again ';
+            $errorMessages['login'] = 'Error try again ';
         }
-    } else {
 
-        // print error messages 
-        foreach ($errorMessages as $key => $value) {
 
-            echo '* ' . $key . ' : ' . $value . '<br>';
-        }
+        $_SESSION['errmessages'] = $errorMessages;
     }
 }
 
@@ -111,7 +107,21 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         </img>
     </div>
     <div id="container">
-        <h1>Log In</h1>
+        <h1>Log In </h1>
+
+        <span style="color: white;">
+            <?php
+            if (isset($_SESSION['errmessages'])) {
+
+                foreach ($_SESSION['errmessages'] as $key =>  $data) {
+
+                    echo '* ' . $key . ' : ' . $data . '<br>';
+                }
+
+                unset($_SESSION['errmessages']);
+            }
+            ?></span>
+
         <span class="close-btn">
             <img src="https://cdn4.iconfinder.com/data/icons/miu/22/circle_close_delete_-128.png"></img>
         </span>

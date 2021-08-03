@@ -100,9 +100,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $sql = "insert into events_check (event_name,event_desc,e_date,e_logo,event_submiter) values ('$name','$describtion','$edate','$LogoName',$adder)";
             $ops =  mysqli_query($con, $sql);
 
-
+            $messege = '';
             if ($ops) {
-                $_SESSION['message'] = "Event Details Sent";
+                $messege = "Event Details Sent";
+                $_SESSION['message'] = $messege;
                 header("Location: " . project("eventSubmit.php"));
             } else {
                 $_SESSION['errmessages'] = "Error in Your Sql Try Again";

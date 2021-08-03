@@ -11,7 +11,7 @@ $mysqlnews = 'SELECT * FROM `news` ORDER BY id DESC LIMIT 3';
 $opNews = mysqli_query($con, $mysqlnews);
 
 
-$mysqlbkAd = 'SELECT book_rels.rels_ad as adimg , books.book_name as bookName ,books.Download as download,books.describtion  as  bookDesc FROM book_rels JOIN books on book_rels.book_name = books.id ';
+$mysqlbkAd = 'SELECT book_rels.rels_ad as adimg , books.book_name as bookName ,books.Download as download,books.describtion  as  bookDesc FROM book_rels JOIN books on book_rels.book_name = books.id limit 1 ';
 $opbkAd = mysqli_query($con, $mysqlbkAd);
 $databkAd = mysqli_fetch_assoc($opbkAd);
 $_SESSION['bookAd'] = $databkAd;
@@ -116,6 +116,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+//event check
+$sqlonCheck = 'SELECT events_check.* , users.name from events_check JOIN users on events_check.event_submiter = users.id  WHERE events_check.event_submiter =' . $_SESSION['users']['id'];
+$oponCheck = mysqli_query($con, $sqlonCheck);
+
+
+//event success
+
+$sqlsucc = 'SELECT events.* , users.name , e_reservation.* , COUNT(enroller) AS enrollers from events JOIN users on events.event_submiter = users.id join e_reservation on events.id = e_reservation.event_id WHERE events.event_submiter = ' .   $_SESSION['users']['id'];
+$oponsucc  = mysqli_query($con, $sqlsucc);
+
+
+
 ?>
 
 
@@ -126,9 +138,83 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Geo to People</title>
     <link href='https://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="<?php echo css('home.css') ?>">
+
+    <style>
+        #analysis {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
+
+
+
+    <div class="m-5 d-flex justify-content-evenly " id=analysis style="display:<?php
+                                                                                if ($_SESSION['users']['user_type'] == 2) {
+                                                                                    echo "block";
+                                                                                } ?> ;">
+        <div class="col-lg-3 col-6 d-lg-block d-none ">
+            <div class="card bg-warning text-white mb-4">
+                <div class="card-body">Events On Check</div>
+                <div class="card-footer">
+
+                    <?php while ($dataonCheck = mysqli_fetch_assoc($oponCheck)) { ?>
+                        <div class="accordion" id="accordionExample" style>
+                            <div class="accordion-item bg-warning">
+                                <h2 class="accordion-header" id="headingOne">
+                                    <button class="accordion-button bg-danger text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne<?php echo $dataonCheck['id'] ?>">
+                                        <?php echo $dataonCheck['event_name'] ?>
+                                    </button>
+                                </h2>
+                                <div id="collapseOne<?php echo $dataonCheck['id'] ?>" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <ul class="list-unstyled">
+                                            <li>Describtion: <?php echo $dataonCheck['event_desc'] ?></li>
+                                            <li class="text-muted">Time: <?php echo $dataonCheck['e_date'] ?></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-6 d-lg-block d-none">
+            <div class="card bg-success text-white mb-4">
+                <div class="card-body">Event Submitted</div>
+                <div class="card-footer">
+                    <?php while ($datasucc = mysqli_fetch_assoc($oponsucc)) { ?>
+                        <div class="accordion" id="accordionExample" style>
+                            <div class="accordion-item bg-dark">
+                                <h2 class="accordion-header" id="headingOne">
+                                    <button class="accordion-button bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne<?php echo $datasucc['id'] ?>">
+                                        <?php echo $datasucc['event_name'] ?>
+                                    </button>
+                                </h2>
+                                <div id="collapseOne<?php echo $datasucc['id'] ?>" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <ul class="list-unstyled">
+                                            <li class="text-white">Num# Enrollers: <span class="text-danger"><?php echo $datasucc['enrollers'] ?></span></li>
+                                            <li>Describtion: <?php echo $datasucc['event_describtion'] ?></li>
+                                            <li class="text-muted">Time: <?php echo $datasucc['eventDate'] ?></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
     <div class="body container mx-auto mt-5">
         <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
@@ -183,7 +269,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         <h5 class="card-title"><?php echo $_SESSION['event']['event_name'] ?></h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="btn btn-primary">Show Events ></a>
+                        <a href="<?php echo project('events.php') ?>" class="btn btn-primary">Show Events ></a>
                     </div>
                 </div>
             </div>

@@ -1,125 +1,141 @@
 <?php
+ob_start();
+require "../../../helpers/paths.php";
+require "../../../helpers/functions.php";
+require '../../../helpers/dbConnection.php';
+require '../../../checklogin/checkLoginadmin.php';
+require '../../../layout/navAdmin.php';
 
-
-require '../../dbConnection.php';
-require "../headeradmin.php";
-
-$id = $_GET['id'];
-$id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
-
-$message = "";
-
-if (!filter_var($id, FILTER_VALIDATE_INT)) {
-
-    $_SESSION['message'] = "Invalid Id";
-
-    header("Location: index.php");
-}
-
-
-
-
-
-function cleanInputs($input)
-{
-
-    $input = trim($input);
-    $input = stripcslashes($input);
-    $input = htmlspecialchars($input);
-
-    return $input;
-}
 
 
 $errorMessages = [];
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-    $name  = cleanInputs($_POST['name']);
-    $email = cleanInputs($_POST['email']);
-    // $password = $_POST['password'];
-    $phone = cleanInputs($_POST['phone']);
-    $gender = cleanInputs($_POST['gender']);
-    $usertype = $_POST['usertype'];
+$id = $_GET['id'];
 
 
 
-    //Name Validation
-    if (!empty($name)) {
-
-        if (strlen($name) < 3) {
-            $errorMessages['name'] = "Name Length must be > 2 ";
-        }
-    } else {
-        $errorMessages['name'] = "Required";
-    }
+$id  = Sanitize($_GET['id'], 1);
 
 
-    //Email Validation
-    if (!empty($email)) {
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errorMessages['email'] = "Invalid Email";
-        }
-    } else {
-        $errorMessages['email'] = "Required";
-    }
+if (!Validator($id, 3)) {
+    $errorMessages['id'] = "Invalid ID";
 
+    $_SESSION['message'] = $errorMessages;
 
-
-    // phone Validation ... 
-    if (!empty($phone)) {
-        // code ...   
-        if (strlen($phone) < 11) {
-
-            $errorMessages['phone'] = "Phone should be 11 numbers";
-        }
-    } else {
-
-        $errorMessages['phone'] = "Required";
-    }
-
-
-    if (count($errorMessages) == 0) {
-
-
-        $sql  = "update users set name = '$name' , email = '$email' , phone='$phone' , gender = '$gender' , user_type = '$usertype'  where id =$id ";
-
-        $op   =  mysqli_query($con, $sql);
-
-        echo $op;
-
-
-
-
-        if ($asss) {
-            $_SESSION['message'] = "Data Updated";
-            header("Location: index.php");
-        } else {
-            $errorMessages['sqlOperation'] = "Error in Your Sql Try Again";
-            echo "Error in Your Sql Try Again";
-        }
-    } else {
-
-        foreach ($errorMessages as $key => $value) {
-
-            echo '* ' . $key . ' : ' . $value . '<br>';
-        }
-    }
+    header("Location: " . resources('books/index.php'));
 }
 
 
 
-$sql = "select * from users where id = $id";
-$op = mysqli_query($con, $sql);
-$data = mysqli_fetch_assoc($op);
+
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    $title  = cleanInputs(Sanitize($_POST['title'], 2));
+    $content = cleanInputs($_POST['content']);
+    $adder = Sanitize($_POST['adder'], 1);
+
+
+    //Name Validation
+    if (!Validator($title, 1)) {
+        $errorMessages['Title'] = "Required";
+    }
+
+    if (!Validator($title, 2, 5)) {
+
+        $errorMessages['Title'] = "title Length must be more than 5 ";
+    }
+
+    //describtion Validation
+
+
+    if (!Validator($content, 1)) {
+        $errorMessages['News Content'] = "Required";
+    }
+
+    if (!Validator($content, 2, 10)) {
+
+        $errorMessages['News Content'] = " News Content Length must be more than 10 ";
+    }
+
+
+
+    $sqlimg = "select image from news where id = " . $id;
+    $opimg  = mysqli_query($con, $sqlimg);
+    $dataimg = mysqli_fetch_assoc($opimg);
+
+    $newsMedia = $_FILES['media']['name'];
+
+    if (!Validator($newsMedia, 1)) {
+        $mediaName = $dataimg['image'];
+    } else {
+        $nameArray = explode('.', $newsMedia);
+
+        $fileExtension = strtolower($nameArray[1]);
+
+        if (!Validator($fileExtension, 5)) {
+            $errorMessages['imageExtension'] = 'Invalid Image Extension';
+        }
+    }
+
+    if (count($errorMessages) > 0) {
+        $_SESSION['errmessages'] = $errorMessages;
+    } else {
+
+        if (Validator($newsMedia, 1)) {
+
+            $tmp_path = $_FILES['media']['tmp_name'];
+            $mediaName = rand() . time() . '.' . $fileExtension;
+            $disFolder =  '../../../assests/images/newsPics/';
+
+            $disPath  = $disFolder . $mediaName;
+
+
+            if (move_uploaded_file($tmp_path, $disPath)) {
+
+                if (!Validator('../../../assests/images/newsPics/' . trim($dataimg['image']), 7)) {
+
+                    $errorMessages['imageChange'] = "image is not deleted";
+                }
+            }
+        }
 
 
 
 
 
-# Fetch dep Query .... 
-$sqlTypes = "select * from usersTypes";
-$op2 =  mysqli_query($con, $sqlTypes);
+
+
+        if (count($errorMessages) == 0) {
+
+
+            $sql  = "update news set title = '$title' , content = '$content' , image='$mediaName' where id =$id ";
+
+            $op   =  mysqli_query($con, $sql);
+
+
+            if ($op) {
+                $_SESSION['message'] = "Data Updated";
+                header("Location: " . resources('news/index.php'));
+            } else {
+                $errorMessages['sqlOperation'] = "Error in Your Sql Try Again";
+                echo "Error in Your Sql Try Again";
+            }
+        }
+
+        $_SESSION['errmessages'] = $errorMessages;
+    }
+}
+//news
+
+$sql = "select * from users where user_type = 1 ";
+$opusers = mysqli_query($con, $sql);
+
+
+//news
+$sqlnews = "select * from news where id =$id";
+$opnews =  mysqli_query($con, $sqlnews);
+$datanews = mysqli_fetch_assoc($opnews);
 
 
 
@@ -135,75 +151,90 @@ $op2 =  mysqli_query($con, $sqlTypes);
     <title>Update data</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../../css/edit.css">
+    <link rel="stylesheet" href="<?php echo css('edit.css') ?>">
 
 </head>
 
-<body>
+<body class="col-12">
+    <h1 class="text-danger">Edit News from Database
+        <small>Edit News </small>
+    </h1>
+    <ol class="breadcrumb bg-gradient bg-dark p-2 mx-auto mt-5 w-50 ">
+        <li class="breadcrumb-item"><a class="text-decoration-none text-danger" href="<?php echo resources('news/index.php') ?>">News</a></li>
+        <li class="breadcrumb-item active ">Edit News</li>
+    </ol>
 
-    <div class="container">
-        <h2 class="text-center h1 text-danger m-5">Update Users Data </h2>
-        <form action="edit.php?id=<?php echo $data['id']; ?>" method="POST" class="container mx-auto mt-5 d-flex flex-column  p-4 ps-0 ">
+    <h4 class="bg-gradient bg-dark p-2 mx-auto mt-5 w-50 text-danger">
+        <?php
+        if (isset($_SESSION['errmessages'])) {
+
+            foreach ($_SESSION['errmessages'] as $key =>  $data) {
+
+                echo '* ' . $key . ' : ' . $data . '<br>';
+            }
+
+            unset($_SESSION['errmessages']);
+        } else {
+            echo "Change inputs !";
+        }
+        ?>
+    </h4>
+    <div class="d-flex flex-column flex-lg-row col-12 justify-content-evenly align-items-center">
+        <form action="edit.php?id=<?php echo $datanews['id']; ?>" method="POST" class=" col-lg-7 col-10  d-flex flex-column  p-4 ps-0" enctype="multipart/form-data">
             <div class="col-sm-12 m-3 ">
                 <div class=" form-floating">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="Enter Name" name="name" value="<?php echo $data['name']; ?>">
-                    <label for="floatingInput">Enter Name</label>
+                    <input value=" <?php echo $datanews['title'] ?>" type="text" class="form-control" id="floatingInput" placeholder="Enter Name" name="title">
+                    <label for="floatingInput">Title</label>
                 </div>
             </div>
             <div class="col-sm-12 m-3 ">
                 <div class=" form-floating">
-                    <input type="e-mail" class="form-control" id="floatingInput" placeholder="E-mail" name="email" value="<?php echo $data['email']; ?>">
-                    <label for="floatingInput">E-mail</label>
+                    <input value=" <?php echo $datanews['content'] ?>" type="text" class="form-control" id="floatingInput" placeholder="Describtion" name="content">
+                    <label for="floatingInput">News Content</label>
                 </div>
             </div>
-            <!-- <div class="col-sm-12 m-3 ">
-                <div class=" form-floating">
-                    <input type="password" disabled class="form-control" id="floatingInput" placeholder="Password" name="password" value="<?php echo $data['password']; ?>">
-                    <label for="floatingInput">Password</label>
-                </div>
-            </div> -->
-            <div class="d-flex align-items-center justify-content-around">
-                <div class="col-lg-3 mt-3 mb-3 ">
-                    <div class=" form-floating">
-                        <input type="text" class="form-control" id="floatingInput" placeholder="Phone.." name="phone" value="<?php echo $data['phone']; ?>">
-                        <label for="floatingInput">Phone</label>
-                    </div>
-                </div>
-                <div class="col-sm-3 mt-3 mb-3 ">
+
+
+            <div class="col-sm-12 m-3 form-control">
+                <label for="floatingInput">uploade News Media</label>
+                <input type="file" name="media" id="floatingInput" class="form-control">
+            </div>
+
+
+
+
+
+            <div class="d-flex flex-column flex-lg-row align-items-center justify-content-around">
+
+                <div class="col-lg-5 col-10 mt-3 mb-3 ">
                     <div class=" form-control p-2">
-                        <label for="usertype" class="p-2">Users Types</label>
-                        <select name="usertype" id="usertype" class="form-select" name="usertype">
-                            <?php while ($datas = mysqli_fetch_assoc($op2)) {
+                        <label for="category" class="p-2">News adder</label>
+                        <select id="category" class="form-select" name="adder">
+                            <?php while ($data = mysqli_fetch_assoc($opusers)) {
                             ?>
-                                <option value="<?php echo $datas['id']; ?>" <?php if ($datas['id'] == $data['user_type']) {
-                                                                                echo 'selected';
-                                                                            } ?>><?php echo $datas['user_type']; ?></option>
+                                <option value="<?php echo $data['id']; ?>"><?php echo $data['name']; ?></option>
                             <?php } ?>
                         </select>
                     </div>
                 </div>
 
-                <div class="col-sm-3 mt-3 mb-3 ">
-                    <div class=" form-control p-2">
-                        <label for="gender" class="p-2">gender</label>
-                        <select name="gender" id="gender" class="form-select" name="gender">
-                            <option value="male" <?php if ($data['gender'] == 'male') {
-                                                        echo 'selected';
-                                                    } ?>>Male</option>
-                            <option value="female" <?php if ($data['gender'] == 'female') {
-                                                        echo 'selected';
-                                                    } ?>>Female</option>
-                        </select>
-                    </div>
-                </div>
+
             </div>
 
 
             <input type="submit" class="btn btn-warning col-sm-12 m-3" value="Update">
 
         </form>
-    </div>
 
+
+        <div class="coverpic col-lg-2 align-self-center col-4">
+            <div class="card-body bg-warning">
+                <p class="card-text text-danger text-center fw-bold fs-4">Cover</p>
+            </div>
+            <img src="<?php echo images('newsPics/') . trim($datanews['image']) ?>" class="card-img-top" alt="cover">
+        </div>
+    </div>
 </body>
+
 
 </html>

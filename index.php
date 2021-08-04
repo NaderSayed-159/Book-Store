@@ -138,22 +138,18 @@ $oponsucc  = mysqli_query($con, $sqlsucc);
     <title>Geo to People</title>
     <link href='https://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="<?php echo css('home.css') ?>">
-
-    <style>
-        #analysis {
-            display: none;
-        }
-    </style>
 </head>
 
 <body>
 
 
 
-    <div class="m-5 d-flex justify-content-evenly " id=analysis style="display:<?php
-                                                                                if ($_SESSION['users']['user_type'] == 2) {
-                                                                                    echo "block";
-                                                                                } ?> ;">
+    <div class="m-5 d-flex justify-content-evenly d-<?php
+                                                    if ($_SESSION['users']['user_type'] == 2) {
+                                                        echo "block";
+                                                    } else {
+                                                        echo "none";
+                                                    } ?> ;">
         <div class="col-lg-3 col-6 d-lg-block d-none ">
             <div class="card bg-warning text-white mb-4">
                 <div class="card-body">Events On Check</div>
@@ -227,7 +223,7 @@ $oponsucc  = mysqli_query($con, $sqlsucc);
                 <?php while ($datanews = mysqli_fetch_assoc($opNews)) {
                 ?>
                     <div class="carousel-item position-relative " data-bs-interval="3000">
-                        <img src="<?php echo $datanews['image'] ?>" class="d-block w-100 h-100" alt="newsimg">
+                        <img src="<?php echo images('newsPics/') . $datanews['image']; ?>" class="d-block w-100 h-100" alt="newsimg">
                         <div class="carousel-caption d-none d-md-block position-absolute bottom-50 start-50">
                             <h5><?php echo $datanews['title'] ?></h5>
                             <p><?php echo $datanews['content'] ?></p>

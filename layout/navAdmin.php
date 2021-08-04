@@ -70,7 +70,7 @@
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
-                                    <li><a class="dropdown-item" href="#">News</a></li>
+                                    <li><a class="dropdown-item" href="<?php echo resources('news/index.php') ?>">News</a></li>
                                     <li><a class="dropdown-item" href="#">Posts</a></li>
                                     <li>
                                         <hr class="dropdown-divider">

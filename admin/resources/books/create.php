@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (!Validator($describtion, 2, 10)) {
 
-        $errorMessages['name'] = "Book name Length must be more than 10 ";
+        $errorMessages['describtion'] = "Book describtion Length must be more than 10 ";
     }
 
 
@@ -150,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <small>Create a new book </small>
     </h1>
     <ol class="breadcrumb bg-gradient bg-dark p-2 mx-auto mt-5 w-50 ">
-        <li class="breadcrumb-item"><a class="text-decoration-none text-danger" href="<?php echo users('index.php') ?>">Books</a></li>
+        <li class="breadcrumb-item"><a class="text-decoration-none text-danger" href="<?php echo resources('books/index.php') ?>">Books</a></li>
         <li class="breadcrumb-item active ">Add Book</li>
     </ol>
 

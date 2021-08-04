@@ -152,7 +152,7 @@ $op2 =  mysqli_query($con, $sqlcategory);
 $sqlusers = "select * from users";
 $opusers =  mysqli_query($con, $sqlusers);
 
-//users
+//book
 $sqlbook = "select * from books where id =$id";
 $opbooks =  mysqli_query($con, $sqlbook);
 $databook = mysqli_fetch_assoc($opbooks);

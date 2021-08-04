@@ -51,9 +51,9 @@ $_SESSION['bklast'] = $databklast;
     </div>
 
 
-    <div class="d-flex justify-content-evenly mt-5">
+    <div class="d-flex justify-content-evenly mt-5 ">
 
-        <aside class="bg-dark text-white col-2 p-5 m-2 position-sticky top-50" style="height: 300px;">
+        <aside class="bg-dark text-white col-2 p-3 m-2 position-sticky top-50" style="height: 300px;">
 
             <h3 class="">Categories</h3>
             <ul class="list-unstyled ms-3" style=" min-height: 300px">
@@ -69,7 +69,7 @@ $_SESSION['bklast'] = $databklast;
 
             <?php while ($databooks = mysqli_fetch_assoc($opbooks)) { ?>
                 <div class="col book ">
-                    <div class="card w-75 " style="height: 350px; background-color:transparent;">
+                    <div class="card w-75 " style=" background-color:transparent;">
                         <img src="<?php echo images('booksCovers/') . trim($databooks['coverPic']) ?>" class="card-img-top w-75 " alt="..." style="height:100%; ">
                         <div class=" card-body">
                             <h5 class="card-title text-white"><span class="text-danger">Title: </span><?php echo $databooks['book_name']; ?></h5>
@@ -83,6 +83,14 @@ $_SESSION['bklast'] = $databklast;
         </div>
     </div>
 
+
+    <script>
+        let num = document.querySelectorAll('.book').length;
+        console.log(num);
+        document.getElementById("shelf").style.minHeight = num * 350 + "px";
+    </script>
+
+
 </body>
 
 
@@ -90,9 +98,6 @@ $_SESSION['bklast'] = $databklast;
     <marquee class="bg-primary" behavior="slider" direction="center">Copy Rights &copy; : Designed and develped by : Nader Sayed </marquee>
 </footer>
 
-<script>
-    let num = document.querySelectorAll('.book').length;
-    document.getElementById("shelf").style.minHeight = num * 350 + "px";
-</script>
+
 
 </html>

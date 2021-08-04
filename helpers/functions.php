@@ -46,7 +46,7 @@ function Validator($input, $flag, $length = 3)
             break;
 
         case 5:
-            $allowedExtension = ['png', 'jpg'];
+            $allowedExtension = ['png', 'jpg', 'jpeg'];
 
             if (!(in_array($input, $allowedExtension))) {
                 $status = false;

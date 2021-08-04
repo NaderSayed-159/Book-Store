@@ -42,7 +42,7 @@ $_SESSION['bklast'] = $databklast;
 </head>
 
 <body>
-    <div class="col-9 mx-auto mt-3">
+    <div class="col-9 mx-auto mt-3 ">
         <div class="card mb-3 ">
             <img src="<?php echo images('bookRel/') . $_SESSION['bklast']['rels_ad']; ?>" class="card-img-top" alt="ads" style="height: 350px;">
             <div class="card-body">
@@ -55,9 +55,10 @@ $_SESSION['bklast'] = $databklast;
     </div>
 
 
-    <div class="d-flex justify-content-evenly mt-5">
 
-        <aside class="bg-dark text-white col-2 p-5 m-2 position-sticky top-50" style="height: 300px;">
+    <div class="d-flex justify-content-evenly mt-5 flex-column flex-lg-row ">
+
+        <aside class="bg-dark text-white col-2 p-5 m-2 position-sticky top-50  " style="height: 300px;">
 
             <h3 class="">Categories</h3>
             <ul class="list-unstyled ms-3" style=" min-height: 300px">
@@ -71,6 +72,8 @@ $_SESSION['bklast'] = $databklast;
                 <?php } ?>
             </ul>
         </aside>
+
+
 
 
         <div id="shelf" class="conatiner col-8 row row-cols-1 row-cols-md-2 cols-rows-lg-2 g-4" style="min-height :1000px;background: url(assests/images/bg2.jpg) ;">
@@ -100,7 +103,12 @@ $_SESSION['bklast'] = $databklast;
 
 <script>
     let num = document.querySelectorAll('.book').length;
-    document.getElementById("shelf").style.minHeight = num * 350 + "px";
+    if (num == 1) {
+        document.getElementById("shelf").style.minHeight = num * 600 + "px";
+    } else {
+        document.getElementById("shelf").style.minHeight = num * 350 + "px";
+
+    }
 </script>
 
 </html>

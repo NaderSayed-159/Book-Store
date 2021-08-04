@@ -25,12 +25,6 @@ $op = mysqli_query($con, $sql);
     <title>Books Data</title>
     <link rel="stylesheet" href="<?php echo css('display.css') ?>">
     <style>
-        .add {
-            text-align: center;
-            position: absolute;
-            left: 15%;
-            transform: translateX(-50%) translateY(-125%);
-        }
     </style>
 </head>
 
@@ -45,8 +39,9 @@ $op = mysqli_query($con, $sql);
         ?>
 
     </h2>
-    <a href="<?php echo resources('books/create.php') ?>" class="btn btn-danger add">Add New +</a>
-
+    <div class="mx-auto  m-3">
+        <a href="<?php echo resources('books/create.php') ?>" class="btn btn-danger d-block mx-auto w-25 ">Add New +</a>
+    </div>
 
     <table class="container">
         <thead>

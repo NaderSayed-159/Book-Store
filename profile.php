@@ -85,6 +85,10 @@ if (isset($_SESSION['users'])) {
     }
 }
 
+
+
+
+
 ?>
 
 <head>
@@ -109,7 +113,13 @@ if (isset($_SESSION['users'])) {
                         <div class="profile">
 
                             <div class="avatar">
-                                <img src="<?php echo images('usersMedia/profilePics/' . trim($_SESSION['profilePic']['profPic'])); ?>" alt="Circle Image" class="img-raised rounded-circle img-fluid">
+                                <img src="<?php if (isset($_SESSION['profilePic']['profPic'])) {
+
+                                                echo images('usersMedia/profilePics/' . trim($_SESSION['profilePic']['profPic']));
+                                            } else {
+
+                                                echo images('usersMedia/defPP.png');
+                                            } ?>" alt="Circle Image" class="img-raised rounded-circle img-fluid">
                             </div>
                             <div class='change'>
                                 <button data-bs-toggle="collapse" data-bs-target="#collapseOne" class=" btn btn-warning fs-5 p-2 px-3 bg-dark">Change profile pic</button>

@@ -122,7 +122,7 @@ h2 a {
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    padding: 20% 10px !important;
+    padding: 60% 10px !important;
 }
 
 .container td:last-child:hover {

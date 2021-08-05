@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 02, 2021 at 09:34 PM
+-- Generation Time: Aug 05, 2021 at 08:57 AM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 8.0.8
 
@@ -42,10 +42,10 @@ CREATE TABLE `books` (
 --
 
 INSERT INTO `books` (`id`, `book_name`, `book_category`, `describtion`, `Download`, `coverPic`, `book_adder`) VALUES
-(134, ' oil exploration', 1, 'the greatest of all time', 'https://github.com/NaderSayed-159/NTI-Project/tree/b8c2faa5b45acd2c4bf306c322618e65490d8540', ' 9508921921627763778.jpg', 1),
+(134, ' oil exploration', 1, 'the greatest of all time geop', 'https://github.com/NaderSayed-159/NTI-Project/tree/b8c2faa5b45acd2c4bf306c322618e65490d8540', ' 9508921921627763778.jpg', 1),
 (136, 'Structure Geology', 2, 'the greatest of all time', 'https://github.com/NaderSayed-159/NTI-Project/tree/b8c2faa5b45acd2c4bf306c322618e65490d8540', ' 9508931921627763778.jpg', 1),
 (137, 'Petroluem Geology', 2, 'the greatest of all time and all deimensions', 'https://github.com/NaderSayed-159/NTI-Project/tree/b8c2faa5b45acd2c4bf306c322618e65490d8540', ' 15419543301627764580.jpg', 1),
-(138, ' oil exploration', 1, 'the greatest of all time', 'https://github.com/NaderSayed-159/NTI-Project/tree/b8c2faa5b45acd2c4bf306c322618e65490d8540', ' 9508921921627763758.jpg', 1),
+(138, ' oil exploration', 3, 'the greatest of all time', 'https://github.com/NaderSayed-159/NTI-Project/tree/b8c2faa5b45acd2c4bf306c322618e65490d8540', ' 1808208351627996756.jpg', 1),
 (139, 'Up in the pines', 1, 'travel to another side of this world', 'https://github.com/NaderSayed-159/NTI-Project/tree/b8c2faa5b45acd2c4bf306c322618e65490d8540', ' 9508921921627763774.jpg', 1);
 
 -- --------------------------------------------------------
@@ -65,7 +65,8 @@ CREATE TABLE `bookscategory` (
 
 INSERT INTO `bookscategory` (`id`, `book_category`) VALUES
 (1, 'Geology'),
-(2, 'Geophysics');
+(2, 'Geophysics'),
+(3, 'Petroleum Geophysics');
 
 -- --------------------------------------------------------
 
@@ -130,7 +131,9 @@ CREATE TABLE `events` (
 
 INSERT INTO `events` (`id`, `event_name`, `event_describtion`, `eventDate`, `event_logo`, `event_submiter`) VALUES
 (35, 'petroluem upcomin', 'study of petrophyics', '2021-08-02 10:54:14', '5166207391627775517.jpg', 1),
-(36, 'oil exploration', 'the greatest of all time', '2021-08-08 23:31:00', '5362982511627775832.png', 1);
+(36, 'oil exploration', 'the greatest of all time', '2021-08-08 23:31:00', '5362982511627775832.png', 1),
+(37, 'pain to gain', 'human develop', '2021-08-24 01:20:00', '19669227751627953629.png', 67),
+(38, 'oil exploration', 'the greatest of all time', '2021-08-23 23:09:00', '3303064651627773944.png', 1);
 
 -- --------------------------------------------------------
 
@@ -153,8 +156,8 @@ CREATE TABLE `events_check` (
 
 INSERT INTO `events_check` (`id`, `event_name`, `event_desc`, `e_date`, `event_submiter`, `e_logo`) VALUES
 (4, 'petroleum geophysics', 'we are going to  discuss the petroleum industry', '2021-07-31 23:22:28', 1, '12287699871627774839.jpg'),
-(5, 'oil exploration', 'the greatest of all time', '2021-08-23 23:09:00', 1, '3303064651627773944.png'),
-(13, 'oil exploration', 'the greatest of all time', '2021-09-01 02:11:00', 67, '5277057841627870323.png');
+(13, 'oil exploration', 'the greatest of all time', '2021-09-01 02:11:00', 67, '5277057841627870323.png'),
+(14, 'Structure Geo', 'gonna talk about earth', '2021-08-24 03:24:00', 67, '8640659481627950266.png');
 
 -- --------------------------------------------------------
 
@@ -173,8 +176,9 @@ CREATE TABLE `e_reservation` (
 --
 
 INSERT INTO `e_reservation` (`id`, `event_id`, `enroller`) VALUES
-(6, 35, 60),
-(7, 35, 67);
+(6, 37, 60),
+(7, 35, 67),
+(8, 37, 59);
 
 -- --------------------------------------------------------
 
@@ -195,11 +199,12 @@ CREATE TABLE `news` (
 --
 
 INSERT INTO `news` (`id`, `title`, `content`, `image`, `adder`) VALUES
-(1, 'el almein Feild', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque sunt eius animi omnis praesentium! Vel illo, aperiam, nam culpa iusto perspiciatis laborum qui, error iste minima recusandae nostrum ipsa unde id maiores modi tempora vitae laudantium libero. Itaque beat', 'https://lh3.googleusercontent.com/proxy/hJTfz1_gEhuzDqjzb24KBJ64PZPw-i3iswioNciZYqC0El2Iey3nzuzkLogWyZQpdB9mq5zPCLZCZcDs_bUUbODpZ8K1WvUfUNY5eWm9uycW4al8xjgsvTeKkVw', 1),
-(2, 'Zohr Feild', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque sunt eius animi omnis praesentium! Vel illo, aperiam, nam culpa iusto perspiciatis laborum qui, error iste minima recusandae nostrum ipsa unde id maiores modi tempora vitae laudantium libero. Itaque beat', 'https://plsadaptive.s3.amazonaws.com/eco/images/channel_content/images/rig_3.jpg', 1),
-(3, 'Ras-Ghareb Field', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque sunt eius animi omnis praesentium! Vel illo, aperiam, nam culpa iusto perspiciatis laborum qui, error iste minima recusandae nostrum ipsa unde id maiores modi tempora vitae laudantium libero. Itaque beat', 'https://evac.com/wp-content/uploads/2019/06/drilling-and-jack-up-rigs.jpg', 1),
-(4, 'Morgan Field', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque sunt eius animi omnis praesentium! Vel illo, aperiam, nam culpa iusto perspiciatis laborum qui, error iste minima recusandae nostrum ipsa unde id maiores modi tempora vitae laudantium libero. Itaque beat', 'https://www.nsenergybusiness.com/wp-content/uploads/sites/3/2019/11/Gloria-Jack-up-Rig.jpg', 1),
-(5, 'El-Nor Feild', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque sunt eius animi omnis praesentium! Vel illo, aperiam, nam culpa iusto perspiciatis laborum qui, error iste minima recusandae nostrum ipsa unde id maiores modi tempora vitae laudantium libero. Itaque beat', 'https://www.bearing-news.com/wp-content/uploads/2020/08/rkb03082020web1.jpeg', 1);
+(1, 'el almein Feild', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque sunt eius animi omnis praesentium! Vel illo, aperiam, nam culpa iusto perspiciatis laborum qui, error iste minima recusandae nostrum ipsa unde id maiores modi tempora vitae laudantium libero. Itaque beat', '11732852541628105234.jpg', 1),
+(2, 'Zohr Feild', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque sunt eius animi omnis praesentium! Vel illo, aperiam, nam culpa iusto perspiciatis laborum qui, error iste minima recusandae nostrum ipsa unde id maiores modi tempora vitae laudantium libero. Itaque beat', '3656555061628074661.jpg', 1),
+(3, 'Ras-Ghareb Field', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque sunt eius animi omnis praesentium! Vel illo, aperiam, nam culpa iusto perspiciatis laborum qui, error iste minima recusandae nostrum ipsa unde id maiores modi tempora vitae laudantium libero. Itaque beat', '3656554061628074661.jpg', 1),
+(4, 'Morgan Field', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque sunt eius animi omnis praesentium! Vel illo, aperiam, nam culpa iusto perspiciatis laborum qui, error iste minima recusandae nostrum ipsa unde id maiores modi tempora vitae laudantium libero. Itaque beat', '3656554061628074411.jpg', 1),
+(5, 'El-Nor Feild', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque sunt eius animi omnis praesentium! Vel illo, aperiam, nam culpa iusto perspiciatis laborum qui, error iste minima recusandae nostrum ipsa unde id maiores modi tempora vitae laudantium libero. Itaque beat', '365632406162807448811.jpeg', 1),
+(6, 'El-mostakbl', 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque sunt eius animi omnis praesentium! Vel illo, aperiam, nam culpa iusto perspiciatis laborum qui, error iste minima recusandae nostrum ipsa unde id maiores modi tempora vitae laudantium libero. Itaque beat', '15867985601628105924.jpg', 1);
 
 -- --------------------------------------------------------
 
@@ -306,11 +311,12 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `phone`, `gender`, `user
 (55, 'nadersayed0', 'nadersay@gmail.com', 'beed8d5dbfe66bc625d3b733abff0036dcd4a7f9', '01099411326', 'female', 3),
 (59, 'nader', 'nader@gmail.com', '123456789', '1113279567', 'male', 3),
 (60, 'naders', 'delking90@gmail.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', '1113275667', 'male', 3),
-(61, 'nader', 'nase@gmail.com', '2bc92bfef16f612ffac1dbefcb4aab47b0016062', '1113269576', 'male', 3),
+(61, 'nader', 'nase@gmail.com', '2bc92bfef16f612ffac1dbefcb4aab47b0016062', '1113269576', 'male', 4),
 (62, 'root', 'root@admin.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', '1111111111', 'male', 1),
-(64, 'rorosayed', 'rorosayed@gmail.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', '01099412446', 'female', 2),
-(65, 'abdo mohamed', 'am@gmail.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', '01088812446', '', 3),
-(67, 'nadersayed003', 'delking99@gmail.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', '01099411325', '', 2);
+(65, 'abdo mohamed', 'am@gmail.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', '01088812446', 'male', 3),
+(67, 'nadersayed0076', 'delking99@gmail.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', '01099411325', 'male', 2),
+(68, 'Standard', 'standard@mail.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', '01234567896', '', 3),
+(69, 'Comapny', 'company@mail.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', '01234567894', '', 2);
 
 -- --------------------------------------------------------
 
@@ -351,7 +357,7 @@ CREATE TABLE `users_media` (
 --
 
 INSERT INTO `users_media` (`id`, `profile_pic`, `CV`, `user_id`) VALUES
-(1, ' 5836536301627847764.png', '', 67);
+(1, ' 11300901821627997089.png', '', 67);
 
 -- --------------------------------------------------------
 
@@ -535,7 +541,7 @@ ALTER TABLE `books`
 -- AUTO_INCREMENT for table `bookscategory`
 --
 ALTER TABLE `bookscategory`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `book_rels`
@@ -553,25 +559,25 @@ ALTER TABLE `contact`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `events_check`
 --
 ALTER TABLE `events_check`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `e_reservation`
 --
 ALTER TABLE `e_reservation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `news`
 --
 ALTER TABLE `news`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `payments_methods`
@@ -613,7 +619,7 @@ ALTER TABLE `q_answers`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `userstypes`

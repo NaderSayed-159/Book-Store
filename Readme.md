@@ -13,7 +13,8 @@
 *********************************************************************************
 
 
-##### you can only sign up as company or standard user form Signup link in login form
+##### you can only sign up as jobCreatot or standard user form Signup link in login form
+##### to get Comapny accout you should Contact with websit owner with contact form in home inter face
 
 
 # Geology to people Project
@@ -28,7 +29,7 @@
 
 ## Features
 1. 3 types of users 
-2. user profile (not done)
+2. user profile
 3. books library with diff categories and books interface has filter for books
 4. events with user to submit (company) and user to check (admin) and user to enroll (standard) and can refuse it send mail
 5. search engine works in books interface search for books name or cat example (search for **geop**)
